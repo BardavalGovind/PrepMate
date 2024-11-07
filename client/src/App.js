@@ -1,12 +1,8 @@
-import React from 'react';
-import Notes from './components/Notes';
-import TTSSTTControls from './components/TTSS';
+import Speak from './components/SpeechToText'
 function App() {
   return (
     <div className="App">
-      <h1>Easy Preparation tts and stt</h1>
-      <Notes/>
-      <TTSSTTControls/>
+      <Speak/>
     </div>
   );
 }
