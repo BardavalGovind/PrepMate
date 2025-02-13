@@ -19,7 +19,7 @@ var upload = multer({
 //Signup route
 const signup = async (req, res)=>{
     try{
-        const { firstName, lastName, userBio, userEmail, userMobile, userName } = req.body;
+        const { firstName, lastName, userEmail, userMobile, userName } = req.body;
 
         //check whether current user exists
         const existingUser = await User.findOne({ userEmail });
@@ -45,7 +45,6 @@ const signup = async (req, res)=>{
         const newUser = new User({
             firstName,
             lastName,
-            userBio,
             userEmail,
             userMobile,
             userName,
@@ -91,32 +90,5 @@ const login = async (req, res) => {
     }
 };
 
-// const login = async (req, res) => {
-//     try {
-//         const { userEmail, userPassword } = req.body;
-
-//         // Find user by email
-//         const user = await User.findOne({ userEmail });
-//         if (!user) {
-//             return res.status(400).json({ status: "Error", message: "User not found" });
-//         }
-
-//         // Compare the provided password with the hashed password
-//         const passwordMatch = await bcrypt.compare(userPassword, user.userPassword);
-//         if (!passwordMatch) {
-//             return res.status(400).json({ status: "Error", message: "Invalid credentials" });
-//         }
-
-//         // Generate JWT token
-//         // const payload = { _id: user._id, userEmail: user.userEmail };
-//         // const token = jwt.sign(payload, process.env.JWT_SECRET);
-
-//         // Send token as response
-//         return res.status(200).json({ status: "OK", token });
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(400).json({ error: error.message });
-//     }
-// };
 
 module.exports = { signup, login };

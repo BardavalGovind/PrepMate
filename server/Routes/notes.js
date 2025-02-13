@@ -27,7 +27,7 @@ router.put("/edit-note/:noteId", NotesController.editNote);
 router.get("/get-all-notes", NotesController.getAllNotes);
 router.get("/search-notes", NotesController.searchNotes);
 router.delete("/delete-note/:id", NotesController.deleteNote);
-
+router.post("/AIcontent", NotesController.createContent);
 
 
 module.exports = router;

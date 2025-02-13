@@ -4,8 +4,37 @@ const Notes = require("../Models/Notes");
 const multer = require("multer");
 const path = require("path");
 const Note = require("../models/CreateNote")
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 dotenv.config();
+
+// ************** geminiAI code *******
+const generateContent = async (prompt) => {
+    try {
+        const result = await model.generateContent({ contents: [{ parts: [{ text: prompt }] }] });
+        return result.response.text();
+    } catch (error) {
+        console.error("Error in AI generation:", error);
+        return "Error generating response.";
+    }
+};
+
+createContent = async (req, res) => {
+    try {
+        const { question } = req.body;
+        if (!question || question.trim() === "") {
+            return res.status(400).json({ error: "Question cannot be empty" });
+        }
+        const result = await generateContent(question);
+        res.json({ result });
+    } catch (error) {
+        console.error("Server error:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+};
 
 const storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
@@ -268,4 +297,4 @@ const searchNotes = async (req, res) => {
 
 
 module.exports = { uploadNote, getNote, getNoteByID,
-    getAllNotes, deleteNote, searchNotes, addNote, editNote };
+    getAllNotes, deleteNote, searchNotes, addNote, editNote, createContent };
