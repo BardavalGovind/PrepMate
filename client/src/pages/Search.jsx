@@ -5,6 +5,7 @@ const Search = () => {
   return (
     <div>
       <SearchBar/>
+     
     </div>
   )
 }

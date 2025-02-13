@@ -34,6 +34,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <NavLink to="/notecardrender">ViewNote</NavLink>
+              <NavLink to="/geminiai">Ask AI</NavLink>
               <NavLink to="/search">Search</NavLink>
               <NavLink to="/upload">Upload</NavLink>
               <NavLink to="/profile">Profile</NavLink>
@@ -80,6 +81,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <NavLinkMobile to="/notecardrender">ViewNote</NavLinkMobile>
+                <NavLinkMobile to="/geminiai">Ask AI</NavLinkMobile>
                 <NavLinkMobile to="/search">Search</NavLinkMobile>
                 <NavLinkMobile to="/upload">Upload</NavLinkMobile>
                 <NavLinkMobile to="/profile">Profile</NavLinkMobile>

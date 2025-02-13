@@ -22,7 +22,7 @@ const About = () => {
             structured and easily accessible.
           </p>
         </div>
-        <div>
+      <div>
           <h1 className="relative w-fit text-2xl font-bold before:absolute before:top-[90%] before:h-[3px] before:w-[60%] before:bg-[#2563eb] lg:text-4xl lg:before:top-full">
             Who We Are
           </h1>

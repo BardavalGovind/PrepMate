@@ -15,6 +15,7 @@ import Faq from './pages/Faq';
 import Profile from './pages/Profile';
 import { useSelector } from 'react-redux';
 import NoteCardRender from './components/NoteCardRender';
+import AIChat from './pages/GeminiAi';
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
               <Route path='/upload' element={<Upload/>} />
               <Route path='/search' element={<Search/>} />
               <Route path='/notecardrender' element={<NoteCardRender/>} />
+              <Route path='/geminiai' element={<AIChat/>} />
             </>
           ) : (
             <>
@@ -51,8 +53,5 @@ const App = () => {
   )
 }
 export default App;
-
-
-
 
 
