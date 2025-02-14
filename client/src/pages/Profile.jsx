@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -13,20 +14,7 @@ const Profile = () => {
 
   const userId = user._id;
 
-  // useEffect(() => {
-  //   const getUserFiles = async () => {
-  //     const result = await axios.get(`http://localhost:5000/notes/getFiles/${userId}`, {
-  //       // headers: {
-  //       //   Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-  //       // },
-  //     });
-
-  //     console.log(result.data);
-  //     setUserFiles(result.data.data);
-  //   };
-
-  //   getUserFiles();
-  // }, [userId]);
+  
 
   useEffect(() => {
     const getUserFiles = async () => {

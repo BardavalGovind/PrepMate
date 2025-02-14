@@ -21,47 +21,52 @@ const AIChat = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!question.trim()) return;
-
+  
     const newUserMessage = { sender: "user", text: question };
-    setChats([...chats, newUserMessage]);
+    setChats((prevChats) => [...prevChats, newUserMessage]); 
     setLoading(true);
     setQuestion("");
+  
     try {
       const res = await axios.post("http://localhost:5000/notes/AIcontent", { question });
       let aiResponse = res.data.result;
       let words = aiResponse.split(" ");
       let index = 0;
-
+  
+      setChats((prevChats) => [...prevChats, { sender: "ai", text: "" }]); 
+  
       const displayResponse = () => {
+        setChats((prevChats) => {
+          let updatedChats = [...prevChats];
+          let lastMessageIndex = updatedChats.length - 1;
+  
+          if (updatedChats[lastMessageIndex].sender === "ai") {
+            // Fix: Ensure the response is properly appended with a space
+            updatedChats[lastMessageIndex] = {
+              ...updatedChats[lastMessageIndex],
+              text: updatedChats[lastMessageIndex].text + (index > 0 ? " " : "") + words[index],
+            };
+          }
+          return updatedChats;
+        });
+  
+        index++;
         if (index < words.length) {
-          setChats((prevChats) => {
-            let updatedChats = [...prevChats];
-            let lastMessage = updatedChats[updatedChats.length - 1];
-
-            if (lastMessage?.sender === "ai") {
-              lastMessage.text += " " + words[index];
-            } else {
-              updatedChats.push({ sender: "ai", text: words[index] });
-            }
-            return [...updatedChats];
-          });
-
-          index++;
           setTimeout(displayResponse, 100);
         } else {
           setLoading(false);
         }
       };
-
+  
       displayResponse();
-
+  
       if (!selectedChat) {
         const newHistoryItem = {
           id: Date.now(),
           name: `Chat ${history.length + 1}`,
-          chats: [...chats, newUserMessage],
+          chats: [...chats, newUserMessage], 
         };
-        setHistory([...history, newHistoryItem]);
+        setHistory((prevHistory) => [...prevHistory, newHistoryItem]);
         setSelectedChat(newHistoryItem);
       }
     } catch (error) {
@@ -70,7 +75,8 @@ const AIChat = () => {
       setLoading(false);
     }
   };
-
+  
+  
   const handleNewChat = () => {
     setChats([]);
     setSelectedChat(null);
