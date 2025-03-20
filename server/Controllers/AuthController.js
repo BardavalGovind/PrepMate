@@ -10,7 +10,6 @@ dotenv.config();
 
 const router = express.Router();
 
-//multer is package helps to take file as user input and memoryStorage means it uses current memory
 const storage = multer.memoryStorage();
 var upload = multer({
     storage: storage
@@ -21,7 +20,7 @@ const signup = async (req, res)=>{
     try{
         const { firstName, lastName, userEmail, userMobile, userName } = req.body;
 
-        //check whether current user exists
+        
         const existingUser = await User.findOne({ userEmail });
         if(existingUser){
             res.status(401).send("User Already exists with this email")
@@ -70,7 +69,6 @@ const signup = async (req, res)=>{
 const login = async (req, res) => {
     try {
         const { userEmail, userPassword } = req.body;
-        // console.log(userEmail);
 
         const user = await User.findOne({ userEmail });
 

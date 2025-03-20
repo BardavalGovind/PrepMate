@@ -22,6 +22,7 @@ const upload = multer({
 router.post("/upload", upload.single("file"), NotesController.uploadNote);
 router.get("/getFiles", NotesController.getNote);
 router.get("/getFiles/:id", NotesController.getNoteByID);
+
 router.post("/add-note", NotesController.addNote);
 router.put("/edit-note/:noteId", NotesController.editNote);
 router.get("/get-all-notes", NotesController.getAllNotes);
