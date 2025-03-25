@@ -39,7 +39,7 @@ const AIChat = () => {
   
     try {
       const res = await axios.post(
-        "http://localhost:8000/notes/AIcontent", 
+        "http://localhost:8001/notes/AIcontent", 
         { question },
         {
           headers: {

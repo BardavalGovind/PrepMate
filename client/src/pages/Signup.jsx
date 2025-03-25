@@ -26,7 +26,7 @@ const Signup = () => {
       formData.append("userPassword", userPassword);
       formData.append("profileImage", profileImage);
 
-      const result = await axios.post("http://localhost:8000/auth/signup", formData, {
+      const result = await axios.post("http://localhost:8001/auth/signup", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("User registered successfully!");

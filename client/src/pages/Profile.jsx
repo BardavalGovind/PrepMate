@@ -18,7 +18,7 @@ const Profile = () => {
       try{
         const token = localStorage.getItem('token');
         const result = await axios.get(
-          `http://localhost:8000/notes/getFiles/${userId}`,
+          `http://localhost:8001/notes/getFiles/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ const Profile = () => {
         <div className="grid grid-cols-1 gap-5 p-4 sm:grid-cols-2 md:grid-cols-3">
           {userFiles.map((file) => (
             <a
-              href={`http://localhost:5000/files/${file.files}`}
+              href={`http://localhost:8001/files/${file.files}`}
               key={file._id}
               className="mb-3 flex h-[35px] max-w-[250px] items-center justify-between gap-10 rounded-xl border border-black px-4"
               target="_blank"
