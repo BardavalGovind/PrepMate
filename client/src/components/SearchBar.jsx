@@ -16,7 +16,7 @@ const SearchBar = () => {
     e.preventDefault();
 
     try{
-      const notes = await axios.get("http://localhost:5000/notes/getFiles", {
+      const notes = await axios.get("http://localhost:8000/notes/getFiles", {
         params: {
           title: searchQuery,
         },
@@ -39,7 +39,7 @@ const SearchBar = () => {
   }
 
   const showPDF = async (files)=> {
-    window.open(`https://prepmate-nb0h.onrender.com/files/${files}`, "_blank", "noreferrer");
+    window.open(`http://localhost:8000/files/${files}`, "_blank", "noreferrer");
   };
 
   return (

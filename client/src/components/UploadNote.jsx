@@ -33,7 +33,7 @@ const UploadNote = () => {
    
       const token = localStorage.getItem("token");
       const result = await axios.post(
-        "https://prepmate-nb0h.onrender.com/notes/upload",
+        "http://localhost:8000/notes/upload",
         formData,
         {
           headers: {

@@ -18,7 +18,7 @@ const Profile = () => {
       try{
         const token = localStorage.getItem('token');
         const result = await axios.get(
-          `https://prepmate-nb0h.onrender.com/notes/getFiles/${userId}`,
+          `http://localhost:8000/notes/getFiles/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

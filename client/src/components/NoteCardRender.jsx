@@ -63,7 +63,7 @@ const NoteCardRender = () => {
         return; 
       }
       const response = await axios.get(
-        "http://localhost:5000/notes/get-all-notes",
+        "http://localhost:8000/notes/get-all-notes",
         {
            params: { userId },
            headers: {
@@ -83,7 +83,7 @@ const NoteCardRender = () => {
   const deleteNote = async (noteId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/notes/delete-note/${noteId}`,
+        `http://localhost:8000/notes/delete-note/${noteId}`,
         {
           data: { userId }, 
           headers: {
@@ -109,7 +109,7 @@ const NoteCardRender = () => {
     } else {
       try {
         const response = await axios.get(
-          "https://prepmate-nb0h.onrender.com/notes/search-notes", 
+          "http://localhost:8000/notes/search-notes", 
           {
             params: { query, userId },
             headers: {

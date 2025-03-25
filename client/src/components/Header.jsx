@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserData } from "../Redux/slices/user-slice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -13,6 +15,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(clearUserData());
+    toast.success("User successfully logout");
     navigate("/");
     setIsMenuOpen(false); 
   };

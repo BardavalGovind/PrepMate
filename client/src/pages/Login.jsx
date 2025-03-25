@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const user = { userEmail, userPassword };
 
-      const response = await axios.post("https://prepmate-nb0h.onrender.com/auth/login", user);
+      const response = await axios.post("http://localhost:8000/auth/login", user);
 
       const { token, user: userData } = response.data;
 
