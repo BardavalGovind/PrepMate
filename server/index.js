@@ -5,7 +5,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require("./Routes/auth")
 const noteRoutes = require("./Routes/notes");
-const Note = require("./models/CreateNote");
 
 dotenv.config(); 
 
@@ -25,13 +24,11 @@ const connectDb = async () => {
         console.error('MongoDB connection error:', error);
     }
 };
-
 connectDb();
 
 app.use("/auth", authRoutes);
 app.use("/notes", noteRoutes);
 app.use("/files", express.static("files"));
-
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const Notes = require("../Models/Notes")
 const multer = require("multer");
-const Note = require("../models/CreateNote")
+const Note = require("../Models/CreateNote");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);

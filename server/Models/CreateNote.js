@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const CreateSchema = mongoose.Schema({
   title: {
     type: String,

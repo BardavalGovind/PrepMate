@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const dotenv = require('dotenv');
-const User = require('../models/User');
+const User = require('../Models/User');
 const bcrypt = require("bcrypt");
 const multer = require('multer');
 const cloudinary = require('cloudinary');
@@ -13,7 +13,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 var upload = multer({
     storage: storage
-})
+});
 
 const signup = async (req, res) => {
     try {
@@ -27,7 +27,6 @@ const signup = async (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: "No Profile Image Provided" });
         }
-
         const result = await cloudinary.uploader.upload(req.file.path);
 
         const password = req.body.userPassword;
