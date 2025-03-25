@@ -12,6 +12,16 @@ const AIChat = () => {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
+    const storedHistory = localStorage.getItem("chatHistory");
+    if (storedHistory) setHistory(JSON.parse(storedHistory));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("chatHistory", JSON.stringify(history));
+  }, [history]);
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
     chatContainerRef.current?.scrollTo({
       top: chatContainerRef.current.scrollHeight,
       behavior: "smooth",
@@ -23,72 +33,102 @@ const AIChat = () => {
     if (!question.trim()) return;
   
     const newUserMessage = { sender: "user", text: question };
-    setChats((prevChats) => [...prevChats, newUserMessage]); 
+    setChats((prevChats) => [...prevChats, newUserMessage]);
     setLoading(true);
     setQuestion("");
   
     try {
-      const res = await axios.post("http://localhost:5000/notes/AIcontent", { question });
-      let aiResponse = res.data.result;
-      let words = aiResponse.split(" ");
-      let index = 0;
-  
-      setChats((prevChats) => [...prevChats, { sender: "ai", text: "" }]); 
-  
-      const displayResponse = () => {
-        setChats((prevChats) => {
-          let updatedChats = [...prevChats];
-          let lastMessageIndex = updatedChats.length - 1;
-  
-          if (updatedChats[lastMessageIndex].sender === "ai") {
-            // Fix: Ensure the response is properly appended with a space
-            updatedChats[lastMessageIndex] = {
-              ...updatedChats[lastMessageIndex],
-              text: updatedChats[lastMessageIndex].text + (index > 0 ? " " : "") + words[index],
-            };
-          }
-          return updatedChats;
-        });
-  
-        index++;
-        if (index < words.length) {
-          setTimeout(displayResponse, 100);
-        } else {
-          setLoading(false);
+      const res = await axios.post(
+        "http://localhost:5000/notes/AIcontent", 
+        { question },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      };
+      );
+      let aiResponse = res.data.result || "No response received.";
   
-      displayResponse();
+      const words = aiResponse.split(" ");
+      let currentText = "";
   
-      if (!selectedChat) {
-        const newHistoryItem = {
-          id: Date.now(),
-          name: `Chat ${history.length + 1}`,
-          chats: [...chats, newUserMessage], 
-        };
-        setHistory((prevHistory) => [...prevHistory, newHistoryItem]);
-        setSelectedChat(newHistoryItem);
-      }
+      words.forEach((word, index) => {
+        setTimeout(() => {
+          currentText += word + " ";
+          
+          let formattedText = formatResponse(currentText); // Apply formatting dynamically
+  
+          setChats((prevChats) => {
+            let updatedChats = [...prevChats];
+            let lastMessage = updatedChats[updatedChats.length - 1];
+  
+            if (lastMessage?.sender === "ai") {
+              lastMessage.text = formattedText;
+            } else {
+              updatedChats.push({ sender: "ai", text: formattedText });
+            }
+  
+            return [...updatedChats];
+          });
+        }, index * 100);
+      });
+  
     } catch (error) {
       console.error("Error fetching response:", error);
       setChats((prevChats) => [...prevChats, { sender: "ai", text: "Error fetching response." }]);
+    } finally {
       setLoading(false);
     }
   };
   
-  
+
+  const formatResponse = (text) => {
+    return text
+      .split("\n")
+      .map((line, index) => {
+        let boldedLine = line.replace(/(:\s*|-\s*|^)(\w+)/g, (match, p1, p2) => {
+          return `${p1}<u>${p2}</u>`;
+        });
+        return `<p key=${index} style="margin-bottom: 8px;">${boldedLine}</p>`;
+      })
+      .join("");
+  };
+
+  const updateHistory = (chatMessages) => {
+    if (chatMessages.length === 0) return;
+
+    const newChat = {
+      id: Date.now(),
+      name: `Chat ${history.length + 1}`,
+      messages: chatMessages,
+    };
+
+    const updatedHistory = [...history, newChat];
+    setHistory(updatedHistory);
+    localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
+  };
+
   const handleNewChat = () => {
     setChats([]);
     setSelectedChat(null);
   };
 
+  const handleSelectChat = (chat) => {
+    setSelectedChat(chat);
+    setChats(chat.messages);
+  };
+
+  const handleDeleteChat = (chatId) => {
+    setHistory(history.filter((chat) => chat.id !== chatId));
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100 w-full">
+    <div className="flex h-screen bg-gray-900 text-white w-full flex-col sm:flex-row">
       {/* Sidebar */}
-      <aside className="w-[300px] bg-gray-300 text-white p-6 flex flex-col shadow-lg flex-shrink-0">
+      <aside className="sm:w-[300px] w-full bg-gray-800 text-white p-6 flex flex-col shadow-lg flex-shrink-0 sm:h-auto h-[60vh]">
         <button
           onClick={handleNewChat}
-          className="bg-orange-600 w-full py-4 px-6 rounded-lg text-white text-lg font-semibold mb-6 hover:bg-blue-600 transition"
+          className="bg-blue-600 w-full py-4 px-6 rounded-lg text-white text-lg font-semibold mb-6 hover:bg-blue-500 transition"
         >
           <Plus size={20} className="inline-block mr-1" /> New Chat
         </button>
@@ -97,18 +137,18 @@ const AIChat = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search history..."
-          className="w-full p-3 mb-4 rounded bg-gray-100 text-black border border-gray-600 focus:outline-none"
+          className="w-full p-3 mb-4 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none"
         />
-        <div className="flex-grow space-y-2 overflow-y-auto">
+        <div className="flex-grow space-y-2 overflow-y-auto max-h-[40vh] sm:max-h-full">
           {history
             .filter((chat) => chat.name.toLowerCase().includes(searchQuery.toLowerCase()))
             .map((chat) => (
               <div
                 key={chat.id}
                 className={`p-3 rounded-lg cursor-pointer flex justify-between items-center text-lg font-medium ${
-                  selectedChat?.id === chat.id ? "bg-orange-600" : "bg-orange-500"
-                } hover:bg-blue-700 transition`}
-                onClick={() => setSelectedChat(chat)}
+                  selectedChat?.id === chat.id ? "bg-blue-600" : "bg-blue-500"
+                } hover:bg-blue-400 transition`}
+                onClick={() => handleSelectChat(chat)}
               >
                 <span>{chat.name}</span>
                 <Trash
@@ -116,7 +156,7 @@ const AIChat = () => {
                   className="cursor-pointer hover:text-red-400"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setHistory(history.filter((c) => c.id !== chat.id));
+                    handleDeleteChat(chat.id);
                   }}
                 />
               </div>
@@ -125,32 +165,32 @@ const AIChat = () => {
       </aside>
 
       {/* Chat Container */}
-      <div className="flex flex-col flex-grow bg-gray-100">
+      <div className="flex flex-col flex-grow bg-gray-900">
         <div
           ref={chatContainerRef}
-          className="flex-grow p-6 space-y-4 bg-gray-100 rounded-lg mx-auto w-[85%] max-h-[70vh] overflow-y-auto"
+          className="flex-grow p-6 space-y-4 rounded-lg mx-auto w-full sm:w-[85%] max-h-[70vh] overflow-y-auto"
         >
           {chats.map((chat, index) => (
             <div key={index} className={`flex w-full ${chat.sender === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`p-4 rounded-2xl text-white shadow-md max-w-[70%] break-words ${
-                  chat.sender === "user" ? "bg-orange-500" : "bg-green-500"
+                className={`p-4 max-w-[90%] sm:max-w-[70%] break-words rounded-lg ${
+                  chat.sender === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-white"
                 }`}
-              >
-                {chat.text}
-              </div>
+                dangerouslySetInnerHTML={{ __html: chat.text }}
+              ></div>
             </div>
           ))}
-          {loading && <div className="p-4 bg-gray-100 text-white rounded-lg animate-pulse">Typing...</div>}
+          {loading && <div className="p-4 bg-gray-700 text-white rounded-lg animate-pulse">Typing...</div>}
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 flex items-center bg-white rounded-full border-t mx-auto w-[85%]">
+        <form onSubmit={handleSubmit} className="p-4 flex items-center bg-gray-800 rounded-full border-t mx-auto w-full sm:w-[85%] mb-4">
+
           <input
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Type your message..."
-            className="flex-grow p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-200"
+            className="flex-grow p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white w-full"
           />
           <button
             type="submit"
@@ -165,4 +205,4 @@ const AIChat = () => {
   );
 };
 
-export default AIChat;
+export default AIChat; 

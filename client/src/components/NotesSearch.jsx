@@ -1,19 +1,12 @@
-// SearchBar.js
 import React, { useState } from "react";
 
 const NotesSearch = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const handleSearch = () => {
-        console.log("Search button clicked with query:", searchQuery);
-        // if(searchQuery){
-        //     onSearch(searchQuery);
-        // }
         onSearch(searchQuery);
     };
-
     const onClearSearch = () => {
-        console.log("Clear button clicked");
         setSearchQuery("");
         onSearch("");
     }
@@ -35,7 +28,6 @@ const NotesSearch = ({ onSearch }) => {
             </button>
 
             {/* Clear Search Button */}
-            {/* {searchQuery && ( */}
                 <button
                     className="ml-3 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
                     onClick={onClearSearch}

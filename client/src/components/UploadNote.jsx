@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectUserData } from '../Redux/slices/user-slice';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,8 +15,6 @@ const UploadNote = () => {
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
 
-  console.log("user id is: ", userId);
-
   const submitFile = async (e) => {
     try {
       e.preventDefault();
@@ -27,26 +24,24 @@ const UploadNote = () => {
         toast.error("User is not logged in.");
         return;
       }
-
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
       formData.append("tags", tags);
       formData.append("file", file);
       formData.append("userId", userId);
-
-      console.log(title, description, tags, file, userId);
-
+   
+      const token = localStorage.getItem("token");
       const result = await axios.post(
-        "http://localhost:5000/notes/upload",
+        "https://prepmate-nb0h.onrender.com/notes/upload",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
-      console.log("Data: ", result);
       toast.success("Notes Uploaded Successfully!");
 
       setTitle("");
@@ -56,14 +51,13 @@ const UploadNote = () => {
       setError("");
 
     } catch (error) {
-      console.log("Failed to submit file: ", error);
       toast.error("Failed to upload notes.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-orange-400 to-blue-400">
-    <form className="flex h-full w-full max-w-[770px] flex-col items-center justify-center  p-5 md:border md:border-gray-300 lg:justify-center" onSubmit={submitFile}>
+    <form className="flex h-fit w-1/3 max-w-[770px] flex-col items-center justify-center bg-white rounded-lg p-6 md:border md:border-gray-300 lg:justify-center" onSubmit={submitFile}>
       <h1 className="mb-5 text-2xl font-black">Upload Your Notes</h1>
       <div className="mb-5 w-full max-w-[550px] ">
         <input

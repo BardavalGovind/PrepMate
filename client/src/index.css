@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .input-label {
-  @apply text-xs text-slate-400;
-}
-
-.input-box {
-  @apply mb-4 w-full rounded border-[1.5px] bg-transparent px-5 py-3 text-sm outline;
-}
-
-.btn-primary {
-  @apply hover:bg-blue my-1 w-full rounded p-2 text-sm text-white;
-}
-
-.icon-btn {
-  @apply hover:text-primary cursor-pointer text-xl text-slate-300;
-} */
 @keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
@@ -36,22 +21,22 @@
   }
 }
 .hover-text-orange:hover {
-  color: #FFA500; /* Orange color on hover */
-  transform: translateY(-3px); /* Slightly lift the button */
-  background-color: rgba(255, 165, 0, 0.1); /* Light orange background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  color: #FFA500; 
+  transform: translateY(-3px); 
+  background-color: rgba(255, 165, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 /* Navbar blurred background */
 .navbar {
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-  backdrop-filter: blur(10px); /* Blur the background */
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(10px);
 }
 
 /* Button hover effect with blue color */
 .navbar .hover-blue:hover {
-  color: #1D4ED8; /* Blue text on hover */
-  background-color: rgba(29, 78, 216, 0.1); /* Light blue background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  color: #1D4ED8; 
+  background-color: rgba(29, 78, 216, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 /* Hide scrollbars globally */
@@ -60,12 +45,12 @@ body::-webkit-scrollbar {
 }
 
 body {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;    /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none;   
 }
 
 body {
-  padding-top: 80px; /* Height of the navbar */
+  padding-top: 80px;
 }
 
 /* Adjusting arrow size and animation */
@@ -74,7 +59,7 @@ body {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(4mm); /* Small movement */
+    transform: translateX(4mm); 
   }
   100% {
     transform: translateX(0);

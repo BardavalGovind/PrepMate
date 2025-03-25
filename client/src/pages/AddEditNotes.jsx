@@ -15,9 +15,19 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
 
+  const token = localStorage.getItem('token');
+
   const addNewNote = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/notes/add-note", { title, content, tags, userId });
+      const response = await axios.post(
+        "http://localhost:5000/notes/add-note",
+        { title, content, tags, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.data && response.data.note) {
         setError(null);
         showMessage("Note Added Successfully");
@@ -32,7 +42,15 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
   const editNote = async () => {
     try {
       const noteId = noteData._id;
-      const response = await axios.put(`http://localhost:5000/notes/edit-note/${noteId}`, { title, content, tags, userId });
+      const response = await axios.put(
+        `http://localhost:5000/notes/edit-note/${noteId}`, 
+        { title, content, tags, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.data && response.data.note) {
         setError(null);
         showMessage("Note Updated Successfully");
@@ -108,3 +126,9 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
 };
 
 export default AddEditNotes;
+
+
+
+
+
+

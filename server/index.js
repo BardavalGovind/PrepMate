@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const authRoutes = require("./routes/auth");
 const noteRoutes = require("./routes/notes");
 const Note = require("./models/CreateNote");
-const axios = require("axios");
 
 dotenv.config(); 
 
@@ -29,14 +28,10 @@ const connectDb = async () => {
 
 connectDb();
 
-app.get('/', (req, res) => {
-    res.send('Welcome to the Notes App API');
-});
-
-
 app.use("/auth", authRoutes);
 app.use("/notes", noteRoutes);
 app.use("/files", express.static("files"));
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

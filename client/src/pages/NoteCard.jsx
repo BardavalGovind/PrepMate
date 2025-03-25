@@ -12,7 +12,7 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
 
   const speakOut = () => {
     if (!isSpeaking) {
-      synth.cancel(); // Stop any ongoing speech
+      synth.cancel(); 
       const utterance = new SpeechSynthesisUtterance(content);
       utterance.lang = 'en-US';
 
@@ -72,7 +72,8 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
       <Modal 
         isOpen={modalIsOpen} 
         onRequestClose={() => setModalIsOpen(false)}
-        className="w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 mx-auto mt-20 overflow-y-auto relative"
+        className="w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 mx-auto top-40 relative"
+
         style={{ overlay: { backgroundColor: 'rgba(0, 0, 0, 0.5)' } }}
       >
         <h2 className="text-xl font-bold text-gray-800 text-center">{title}</h2>
@@ -109,3 +110,6 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
 };
 
 export default NoteCard;
+
+
+

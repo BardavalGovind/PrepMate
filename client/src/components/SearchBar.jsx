@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 
-
 const SearchBar = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,8 +10,7 @@ const SearchBar = () => {
   const [searchStatus, setSearchStatus] = useState("");
 
   const user = useSelector((state)=> state.user.userData);
-
-  const username = user.userName;
+  const token = localStorage.getItem('token');
 
   const handleSearch = async (e)=>{
     e.preventDefault();
@@ -22,6 +20,9 @@ const SearchBar = () => {
         params: {
           title: searchQuery,
         },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
       if(notes.data.data.length > 0){
         setSearchResults(notes.data.data);
@@ -38,7 +39,7 @@ const SearchBar = () => {
   }
 
   const showPDF = async (files)=> {
-    window.open(`http://localhost:5000/files/${files}`, "_blank", "noreferrer");
+    window.open(`https://prepmate-nb0h.onrender.com/files/${files}`, "_blank", "noreferrer");
   };
 
   return (
@@ -73,36 +74,6 @@ const SearchBar = () => {
       <div className='mt-5
        w-full grid grid-cols-1 gap-5 border
        sm:grid-cols-2 lg:grid-cols-4'>
-        {/* <div className='flex w-[290px] items-center
-        justify-between border border-black
-         bg-[#374151] px-4 py-2 text-white'>
-            <p className=''>
-                <span className='font-bold'>File Name :</span>
-                <span>{' '}Sem8</span>
-            </p>
-            <button className='rounded-xl bg-blue-500
-             px-4 py-1 font-bold hover:bg-blue-600'>
-                Show File
-            </button>
-        </div> */}
-        {/* { Array(8)
-        .fill(true)
-        .map((item, i)=>(
-                <div
-                 key={i}
-                 className='flex w-[290px] items-center
-                justify-between border rounded-lg border-black
-                bg-[#374151] px-4 py-2 text-white'>
-                    <p className=''>
-                        <span className='font-bold'>File Name :</span>
-                        <span>{' '}Sem8</span>
-                    </p>
-                    <button className='rounded-xl bg-blue-500
-                    px-4 py-1 font-bold hover:bg-blue-600'>
-                        Show File
-                </button>
-                </div>
-        ))} */}
 
         {searchStatus === "Found" && searchResults.length > 0 && searchResults.map((notes)=>(
           <div
@@ -129,3 +100,4 @@ const SearchBar = () => {
   );
 };
 export default SearchBar;
+

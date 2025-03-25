@@ -1,26 +1,35 @@
-
 import React, { useEffect, useState } from "react";
-import { FaExternalLinkAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 const Profile = () => {
 
   const user = useSelector((state) => state.user.userData);
-  console.log("User profile image:", user.profileImage);
-  console.log("user is in profile: ", user);
-
+  if (!user) {
+    return <p>Loading profile...</p>; 
+  }
+  const userId = user?._id;
   const [userFiles, setUserFiles] = useState([]);
 
-  const userId = user._id;
-
-  
-
   useEffect(() => {
+    if (!userId) return;
+
     const getUserFiles = async () => {
-      const result = await axios.get(`http://localhost:5000/notes/getFiles/${userId}`);
-      console.log(result.data);
-      setUserFiles(result.data.data);
+      try{
+        const token = localStorage.getItem('token');
+        const result = await axios.get(
+          `https://prepmate-nb0h.onrender.com/notes/getFiles/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUserFiles(result.data.data);
+      }
+      catch(error){
+        console.error('Error fetching files:', error.response?.data || error.message);
+      }
     };
 
     getUserFiles();
@@ -33,8 +42,7 @@ const Profile = () => {
     <div className="lg:h-heightWithoutNavbar flex flex-col items-center justify-center border border-red-500 lg:flex-row">
       <div className="flex w-full flex-col items-center justify-center border-[3px] border-green-500 py-4 lg:h-full lg:w-[40%]">
         <div className="grid h-[200px] w-[200px] place-content-center overflow-hidden rounded-full bg-gray-400 text-2xl font-black">
-          {/* 200 x 200 */}
-          <img src={user.profileImage} alt="userprofile" className="" />
+          <img src={user?.profileImage} alt="userprofile" className="" />
         </div>
         <div className="">
           <div className=" my-2 flex flex-col items-center justify-center ">

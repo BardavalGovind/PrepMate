@@ -3,75 +3,62 @@ import React from 'react';
 const Faq = () => {
     const faqs = [
         {
-          question: "What is FindMyNotes?",
+          question: "What is PrepMate?",
           answer:
-            "FindMyNotes is an online platform designed to facilitate the sharing and access of educational resources among college students. It allows users to upload and download study materials such as notes, presentations, and study guides.",
+            "PrepMate is an AI-powered study platform that helps students create, manage, and organize their notes efficiently. It includes voice-to-text, text-to-speech, AI-assisted summarization, and document storage.",
         },
         {
-          question: "How do I get started with FindMyNotes?",
+          question: "How do I get started with PrepMate?",
           answer:
-            "To get started, simply create an account on our platform. Once registered, you can start uploading your study materials or explore and download resources shared by other students.",
+            "Sign up and log in to your account. Once logged in, you can upload study materials, create notes using text or voice input, and use AI assistance for summarization.",
         },
         {
-          question: "Is FindMyNotes free to use?",
+          question: "Can I upload and manage my own documents?",
           answer:
-            "Yes, FindMyNotes is free to use. We believe in making education accessible to everyone, and our platform is open to all students without any subscription fees.",
+            "Yes! You can upload, view, edit, and delete your documents. The uploaded files are securely stored and searchable.",
         },
         {
-          question: "Are my documents secure on FindMyNotes?",
+          question: "How does the AI assistant help in note-taking?",
           answer:
-            "Absolutely. We prioritize the security and privacy of your documents. FindMyNotes employs advanced encryption and security measures to ensure the confidentiality of your uploaded materials.",
+            "PrepMate's AI assistant, powered by Gemini AI, helps summarize notes, generate study guides, and suggest key points for better learning.",
         },
         {
-          question: "Can I upload any type of document on FindMyNotes?",
+          question: "Can I listen to my notes instead of reading them?",
           answer:
-            "Yes, you can upload a variety of document types, including PDFs, Word documents, PowerPoint presentations, and more. Our platform is designed to accommodate a range of study materials.",
+            "Yes! Click the 'Listen' button (green color), and your notes will be read aloud using the text-to-speech feature.",
         },
         {
-          question: "How can I search for specific study materials on FindMyNotes?",
+          question: "How do I search for my notes and files?",
           answer:
-            "Use the search bar on the platform to look for specific study materials. You can enter keywords, subjects, or topics to find relevant documents quickly.",
+            "Use the search bar to find files quickly. Notes are also sorted based on their creation date.",
         },
         {
-          question:
-            "Can I collaborate with other students on projects using FindMyNotes?",
+          question: "What is the + icon in ViewNotes for?",
           answer:
-            "Absolutely. FindMyNotes offers real-time collaboration tools, allowing you to work on group projects and assignments with your peers. Share, edit, and collaborate seamlessly.",
+            "The '+' (blue color) icon allows you to create new notes using text input or voice-to-text functionality.",
         },
         {
-          question: "Is there a limit to the file size I can upload?",
+          question: "How do I access my profile and track my uploads?",
           answer:
-            "Currently, there is a file size limit for uploads. Please refer to the platform's guidelines for specific details on file size limitations.",
-        },
-        {
-          question: "How can I provide feedback on a document?",
-          answer:
-            "Each document on FindMyNotes comes with a feedback and rating section. You can share your thoughts, ask questions, or provide feedback on the quality of the material.",
+            "Your profile page shows details about your uploaded documents and activity. You can manage your uploads from there.",
         },
       ];
+
   return (
-    <div className='h-heightWithoutNavbar gird place-content-center
-      '>
-      <div className='mx-auto max-w-[1550px] px-5 py-8'>
-        <h1 className='mb-6 text-3xl font-black'>Frequently Asked Questions</h1>
-        <div className="grid gird-cols-1 gap-6
-        sm:grid-cols-2 lg:grid-cols-3">
-            {
-                faqs.map((item, i)=>{
-                  return  <div key={i} className=''>
-                        <h1 className='mb-2 text-lg font-medium 
-                        sm:text-xl'>{item.question}</h1>
-                        <p className='border-b pb-2 text-sm
-                         text-gray-700 sm:text-base'>{item.answer}</p>
-                    </div>
-                })
-            }
+    <div className="h-heightWithoutNavbar grid place-content-center">
+        <h1 className="mb-6 text-3xl font-black text-center">Frequently Asked Questions</h1>
+      <div className="mx-auto max-w-[1550px] px-5 py-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {faqs.map((item, i) => (
+            <div key={i} className="border-b pb-3">
+              <h1 className="mb-2 text-lg font-medium sm:text-xl">{item.question}</h1>
+              <p className="text-sm text-gray-700 sm:text-base">{item.answer}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Faq;
-
-

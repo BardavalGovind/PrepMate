@@ -38,17 +38,17 @@ const Footer = () => {
           </h2>
           <ul className="text-gray-300 space-y-2">
             <li>
-              <Link to="/about" className="hover:text-blue-500 transition duration-300">
+              <Link to="/" className="hover:text-blue-500 transition duration-300">
                 +91 91822 74217
               </Link>
             </li>
             <li>
-              <Link to="/faq" className="hover:text-blue-500 transition duration-300">
+              <Link to="/" className="hover:text-blue-500 transition duration-300">
                 +91 91822 74217
               </Link>
             </li>
             <li>
-              <Link to="/faq" className="hover:text-blue-500 transition duration-300">
+              <Link to="/" className="hover:text-blue-500 transition duration-300">
                 bardavalgovind2005@gmail.com
               </Link>
             </li>

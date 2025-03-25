@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUserData } from "../Redux/slices/user-slice";
+import { clearUserData } from "../Redux/slices/user-slice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -11,8 +11,10 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(removeUserData());
+    localStorage.removeItem("token");
+    dispatch(clearUserData());
     navigate("/");
+    setIsMenuOpen(false); 
   };
 
   const toggleMenu = () => {
@@ -27,8 +29,8 @@ const Navbar = () => {
           PrepMate
         </div>
 
-        {/* Center Navigation Links for Authenticated User, Right-Aligned for Unauthenticated */}
-        <nav className={`flex flex-grow gap-6 ${isAuthenticated ? 'justify-center' : 'justify-end'}`}>
+        {/* Center Navigation Links for Desktop */}
+        <nav className={`hidden md:flex flex-grow gap-6 ${isAuthenticated ? 'justify-center' : 'justify-end'}`}>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/about">About</NavLink>
           {isAuthenticated ? (
@@ -50,14 +52,14 @@ const Navbar = () => {
         {/* Logout Button */}
         {isAuthenticated && (
           <button
-            className="px-6 py-3 font-semibold text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 rounded-lg duration-300"
+            className="hidden md:block px-6 py-3 font-semibold text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 rounded-lg duration-300"
             onClick={handleLogout}
           >
             Logout
           </button>
         )}
 
-        {/* Hamburger Menu for Small Screens */}
+        {/* Hamburger Menu - Only for Small Screens */}
         <div className="md:hidden">
           <GiHamburgerMenu
             className="text-2xl text-black cursor-pointer transition duration-300 transform hover:scale-110"
@@ -66,46 +68,48 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with Backdrop */}
       {isMenuOpen && (
-        <div className="fixed top-0 left-0 w-[250px] h-full bg-gradient-to-r from-blue-700 to-purple-700 text-white z-50 p-5 rounded-r-lg">
-          <button
-            className="text-white text-2xl absolute top-5 right-5"
-            onClick={toggleMenu}
-          >
-            ✕
-          </button>
-          <nav className="flex flex-col gap-2 mt-10">
-            <NavLinkMobile to="/">Home</NavLinkMobile>
-            <NavLinkMobile to="/about">About</NavLinkMobile>
-            {isAuthenticated ? (
-              <>
-                <NavLinkMobile to="/notecardrender">ViewNote</NavLinkMobile>
-                <NavLinkMobile to="/geminiai">Ask AI</NavLinkMobile>
-                <NavLinkMobile to="/search">Search</NavLinkMobile>
-                <NavLinkMobile to="/upload">Upload</NavLinkMobile>
-                <NavLinkMobile to="/profile">Profile</NavLinkMobile>
-                <button
-                  className="w-full text-left hover:bg-blue-500 p-4 rounded-lg transition duration-300"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <NavLinkMobile to="/login">Login</NavLinkMobile>
-                <NavLinkMobile to="/signup">Signup</NavLinkMobile>
-              </>
-            )}
-          </nav>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 backdrop-blur-md z-50">
+          <div className="w-[250px] h-full bg-gradient-to-r from-blue-700 to-purple-700 text-white p-5 rounded-r-lg">
+            <button
+              className="text-white text-2xl absolute top-5 right-5"
+              onClick={toggleMenu}
+            >
+              ✕
+            </button>
+            <nav className="flex flex-col gap-2 mt-10">
+              <NavLinkMobile to="/" onClick={toggleMenu}>Home</NavLinkMobile>
+              <NavLinkMobile to="/about" onClick={toggleMenu}>About</NavLinkMobile>
+              {isAuthenticated ? (
+                <>
+                  <NavLinkMobile to="/notecardrender" onClick={toggleMenu}>ViewNote</NavLinkMobile>
+                  <NavLinkMobile to="/geminiai" onClick={toggleMenu}>Ask AI</NavLinkMobile>
+                  <NavLinkMobile to="/search" onClick={toggleMenu}>Search</NavLinkMobile>
+                  <NavLinkMobile to="/upload" onClick={toggleMenu}>Upload</NavLinkMobile>
+                  <NavLinkMobile to="/profile" onClick={toggleMenu}>Profile</NavLinkMobile>
+                  <button
+                    className="w-full text-left hover:bg-blue-500 p-4 rounded-lg transition duration-300"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLinkMobile to="/login" onClick={toggleMenu}>Login</NavLinkMobile>
+                  <NavLinkMobile to="/signup" onClick={toggleMenu}>Signup</NavLinkMobile>
+                </>
+              )}
+            </nav>
+          </div>
         </div>
       )}
     </header>
   );
 };
 
-// Reusable NavLink Component for Desktop with Animated Underline Effect
+// Desktop Animation
 const NavLink = ({ to, children }) => (
   <Link
     to={to}
@@ -116,11 +120,12 @@ const NavLink = ({ to, children }) => (
   </Link>
 );
 
-// Reusable NavLink Component for Mobile
-const NavLinkMobile = ({ to, children }) => (
+//NavLink Component for Mobile
+const NavLinkMobile = ({ to, children, onClick }) => (
   <Link
     to={to}
     className="w-full hover:bg-blue-500 p-3 rounded-lg transition duration-300"
+    onClick={onClick}
   >
     {children}
   </Link>

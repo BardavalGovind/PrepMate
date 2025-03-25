@@ -16,7 +16,6 @@ const generateContent = async (prompt) => {
         const result = await model.generateContent({ contents: [{ parts: [{ text: prompt }] }] });
         return result.response.text();
     } catch (error) {
-        console.error("Error in AI generation:", error);
         return "Error generating response.";
     }
 };
@@ -24,7 +23,6 @@ const generateContent = async (prompt) => {
 createContent = async (req, res) => {
     try {
         const { question } = req.body;
-        console.log("Received question:", question);
         
         if (!question || question.trim() === "") {
             return res.status(400).json({ error: "Question cannot be empty" });
@@ -32,41 +30,37 @@ createContent = async (req, res) => {
         const result = await generateContent(question);
         res.json({ result });
     } catch (error) {
-        console.error("Server error:", error);
         res.status(500).json({ error: "Server error" });
     }
 };
 
 const storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
-
+//uploadNote
 const uploadNote = async (req, res) => {
     try {
-        const fileName = req.body.title;
-        const fileDescription = req.body.description;
-        const tags = req.body.tags;
-        const file = req.file.filename;
+      const fileName = req.body.title;
+      const fileDescription = req.body.description;
+      const tags = req.body.tags;
+      const file = req.file.filename;
 
-        const uploadedBy = req.body.userId;
-        console.log(uploadedBy);
-
-        const newFile = new Notes({
-            fileName: fileName,
-            fileDescription: fileDescription,
-            tags: tags,
-            files: file,
-            uploadedBy: uploadedBy
-        });
-
-        await newFile.save();
-        res.send({ status: "Ok" });
-
+      const uploadedBy = req.user._id;
+  
+      const newFile = new Notes({
+        fileName: fileName,
+        fileDescription: fileDescription,
+        tags: tags,
+        files: file,
+        uploadedBy: uploadedBy,
+      });
+      await newFile.save();
+      res.send({ status: "Ok" });
+  
     } catch (error) {
-        res.status(400).json({ error: error.message });
-        console.log(error);
+      res.status(400).json({ error: error.message });
     }
 };
-
+//getNote
 const getNote = async (req, res) => {
     try {
         const { title, tag } = req.query;
@@ -85,9 +79,7 @@ const getNote = async (req, res) => {
                 $options: "i"
             };
         };
-
         const data = await Notes.find(query);
-        console.log("getnode data: ", data);
         res.send({ data: data });
 
     } catch (error) {
@@ -95,6 +87,7 @@ const getNote = async (req, res) => {
     }
 };
 
+//getNoteByID
 const getNoteByID = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -153,8 +146,6 @@ const editNote = async (req, res) => {
     try {
         const { title, content, tags, userId } = req.body;
         const noteId = req.params.noteId;
-
-        console.log("Received for Edit:", { noteId, title, content, tags, userId });
 
         if (!userId) {
             return res.status(400).json({ error: true, message: "userId is required" });
@@ -247,7 +238,6 @@ const getAllNotes = async (req, res) => {
 // Search Notes
 const searchNotes = async (req, res) => {
     const { query, userId } = req.query; 
-    //console.log("userid for search notes backend: ", userId);
 
     if (!userId) {
         return res.status(400).json({ error: "Missing userId" });
@@ -277,9 +267,6 @@ const searchNotes = async (req, res) => {
         });
     }
 };
-
-
-
 
 module.exports = { uploadNote, getNote, getNoteByID,
     getAllNotes, deleteNote, searchNotes, addNote, editNote, createContent };

@@ -1,23 +1,34 @@
-import React, { useEffect } from 'react';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import React, { useEffect, useRef } from "react";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
 const SpeechToText = ({ setContent }) => {
   const { transcript, resetTranscript, listening } = useSpeechRecognition();
+  const lastLengthRef = useRef(0); 
 
   const startListening = () => {
-    SpeechRecognition.startListening({ continuous: true, language: 'en-IN' });
+    SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
   };
 
   const stopListening = () => {
     SpeechRecognition.stopListening();
-    setContent((prevContent) => prevContent + " " + transcript); // Append instead of replace
+    appendNewWords(); 
+  };
+
+  const appendNewWords = () => {
+    const words = transcript.split(" "); 
+    const newWords = words.slice(lastLengthRef.current);
+
+    if (newWords.length > 0) {
+      setContent((prevContent) => prevContent + " " + newWords.join(" "));
+      lastLengthRef.current = words.length;
+    }
   };
 
   useEffect(() => {
     if (listening) {
-      setContent((prevContent) => prevContent + " " + transcript);
+      appendNewWords();
     }
-  }, [listening, transcript, setContent]);
+  }, [transcript]);
 
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return <p className="text-red-500 text-sm">Your browser doesn't support speech recognition.</p>;
@@ -28,11 +39,10 @@ const SpeechToText = ({ setContent }) => {
       <button
         className={`w-32 h-12 text-lg font-semibold flex items-center justify-center 
           rounded-xl shadow-md transition-all duration-300 
-          ${listening ? 'bg-green-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}
-        `}
+          ${listening ? "bg-green-600 text-white" : "bg-green-500 hover:bg-green-600 text-white"}`}
         onClick={startListening}
       >
-        Start
+        Speak Out
       </button>
       <button
         className="w-32 h-12 text-lg font-semibold flex items-center justify-center 

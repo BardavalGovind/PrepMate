@@ -31,6 +31,7 @@ const NoteCardRender = () => {
 
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
+  const token = localStorage.getItem('token'); 
 
   const handleEdit = (noteDetails) => {
     setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
@@ -55,37 +56,40 @@ const NoteCardRender = () => {
     }));
   };
 
-  // Fetch All Notes with userId (No token required, fetch notes based on userId)
   const getAllNotes = async () => {
-    try {
-      console.log("userid for getallnotes is: ", userId); // Check userId before making the API call
+    try { 
       if (!userId) {
         console.log("User not logged in or userId is missing");
-        return; // Prevent API call if userId is missing
+        return; 
       }
+      const response = await axios.get(
+        "http://localhost:5000/notes/get-all-notes",
+        {
+           params: { userId },
+           headers: {
+            Authorization: `Bearer ${token}`,
+           },
+        }
+    );
 
-      const response = await axios.get("http://localhost:5000/notes/get-all-notes", {
-        params: { userId }  // Passing userId directly for authorization logic
-      });
-
-      console.log("response data in get all notes functions: ", response.data);
       if (response.data && response.data.notes) {
-        setAllNotes(response.data.notes);
-        console.log("all notes: ", allNotes);
+        setAllNotes(response.data.notes.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn)));
       }
     } catch (error) {
       console.log("Error occurred while fetching notes:", error);
     }
   };
 
-  // Delete Note with noteId (No token required)
   const deleteNote = async (noteId) => {
     try {
       const response = await axios.delete(
         `http://localhost:5000/notes/delete-note/${noteId}`,
         {
-          data: { userId }, // Ensure userId is correctly passed
-        }
+          data: { userId }, 
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+       }
       );
 
       if (response.data && !response.data.error) {
@@ -101,16 +105,19 @@ const NoteCardRender = () => {
   const onSearchNote = async (query) => {
     if (!query) {
       setIsSearch(false);
-      await getAllNotes(); // Fetch all notes if the search query is empty
+      await getAllNotes(); 
     } else {
       try {
-        const response = await axios.get("http://localhost:5000/notes/search-notes", {
-          params: { query, userId }  // Passing userId for search
-        });
-
-        console.log("userid for search note frontend: ", userId);
-
-        if (response.data && response.data.notes) {
+        const response = await axios.get(
+          "https://prepmate-nb0h.onrender.com/notes/search-notes", 
+          {
+            params: { query, userId },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+      );
+      if(response.data && response.data.notes) {
           setIsSearch(true);
           setAllNotes(response.data.notes);
         }
@@ -122,7 +129,7 @@ const NoteCardRender = () => {
 
   useEffect(() => {
     if (userId) {
-      getAllNotes(); // Fetch notes for the user on initial load
+      getAllNotes(); 
     }
   }, [userId]);
 
@@ -141,8 +148,8 @@ const NoteCardRender = () => {
                 date={item.createdOn}
                 content={item.content}
                 tags={item.tags}
-                onEdit={() => handleEdit(item)}  // Edit the note
-                onDelete={() => deleteNote(item._id)} // Pass the noteId here
+                onEdit={() => handleEdit(item)}  
+                onDelete={() => deleteNote(item._id)} 
               />
             ))}
           </div>
@@ -176,9 +183,9 @@ const NoteCardRender = () => {
         className="w-full h-auto max-h-[80vh] bg-white rounded-md mx-auto mt-14 p-5 overflow-y-auto"
         style={{
           content: {
-            maxWidth: "100vw", // Ensure modal width takes up the full viewport width
-            maxHeight: "90vh", // Prevent the modal from overflowing the viewport vertically
-            overflow: "hidden", // Hide scrollbars
+            maxWidth: "100vw", 
+            maxHeight: "90vh", 
+            overflow: "hidden", 
             borderRadius: "16px",
           },
         }}
@@ -203,3 +210,4 @@ const NoteCardRender = () => {
 };
 
 export default NoteCardRender;
+
