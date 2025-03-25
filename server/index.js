@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const authRoutes = require("./routes/auth.js")
+const authRoutes = require("./routes/auth")
 const noteRoutes = require("./routes/notes");
 const Note = require("./models/CreateNote");
 
