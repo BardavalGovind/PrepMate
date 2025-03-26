@@ -9,7 +9,7 @@ import EmptyCard from "./EmptyCard/EmptyCard";
 import AddNotesImg from "../images/addnote.jpg";
 import NotesSearch from "./NotesSearch";
 import Message from './FeedbackMessage/Message';
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 Modal.setAppElement("#root");
 
 const NoteCardRender = () => {
@@ -63,7 +63,7 @@ const NoteCardRender = () => {
         return; 
       }
       const response = await axios.get(
-        "http://localhost:8001/notes/get-all-notes",
+        `${BACKEND_URL}/notes/get-all-notes`,
         {
            params: { userId },
            headers: {
@@ -83,7 +83,7 @@ const NoteCardRender = () => {
   const deleteNote = async (noteId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8001/notes/delete-note/${noteId}`,
+        `${BACKEND_URL}/notes/delete-note/${noteId}`,
         {
           data: { userId }, 
           headers: {
@@ -109,7 +109,7 @@ const NoteCardRender = () => {
     } else {
       try {
         const response = await axios.get(
-          "http://localhost:8001/notes/search-notes", 
+          `${BACKEND_URL}/notes/search-notes`, 
           {
             params: { query, userId },
             headers: {
@@ -210,4 +210,3 @@ const NoteCardRender = () => {
 };
 
 export default NoteCardRender;
-

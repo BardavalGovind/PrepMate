@@ -5,6 +5,7 @@ import { setUserData } from "../Redux/slices/user-slice";
 import { useNavigate, Link } from "react-router-dom"; 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -19,8 +20,8 @@ const Login = () => {
 
     try {
       const user = { userEmail, userPassword };
-
-      const response = await axios.post("http://localhost:8001/auth/login", user);
+      console.log(import.meta.env.VITE_BACKEND_URL);
+      const response = await axios.post(`${BACKEND_URL}/auth/login`, user);
 
       const { token, user: userData } = response.data;
 

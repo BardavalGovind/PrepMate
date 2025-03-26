@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Send, Loader2, Trash, Plus } from "lucide-react";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const AIChat = () => {
   const [question, setQuestion] = useState("");
   const [chats, setChats] = useState([]);
@@ -39,7 +39,7 @@ const AIChat = () => {
   
     try {
       const res = await axios.post(
-        "http://localhost:8001/notes/AIcontent", 
+        `${BACKEND_URL}/notes/AIcontent`, 
         { question },
         {
           headers: {
@@ -56,7 +56,7 @@ const AIChat = () => {
         setTimeout(() => {
           currentText += word + " ";
           
-          let formattedText = formatResponse(currentText); // Apply formatting dynamically
+          let formattedText = formatResponse(currentText); 
   
           setChats((prevChats) => {
             let updatedChats = [...prevChats];

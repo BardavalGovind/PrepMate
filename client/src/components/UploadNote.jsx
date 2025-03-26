@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const UploadNote = () => {
 
   const [title, setTitle] = useState("");
@@ -33,7 +33,7 @@ const UploadNote = () => {
    
       const token = localStorage.getItem("token");
       const result = await axios.post(
-        "http://localhost:8001/notes/upload",
+        `${BACKEND_URL}/notes/upload`,
         formData,
         {
           headers: {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const Signup = () => {
   const [profilePreviewImage, setProfilePreviewImage] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -26,7 +26,7 @@ const Signup = () => {
       formData.append("userPassword", userPassword);
       formData.append("profileImage", profileImage);
 
-      const result = await axios.post("http://localhost:8001/auth/signup", formData, {
+      const result = await axios.post(`${BACKEND_URL}/auth/signup`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("User registered successfully!");

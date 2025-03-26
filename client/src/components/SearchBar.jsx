@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from 'react-redux';
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const SearchBar = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +16,7 @@ const SearchBar = () => {
     e.preventDefault();
 
     try{
-      const notes = await axios.get("http://localhost:8001/notes/getFiles", {
+      const notes = await axios.get(`${BACKEND_URL}/notes/getFiles`, {
         params: {
           title: searchQuery,
         },
@@ -39,7 +39,7 @@ const SearchBar = () => {
   }
 
   const showPDF = async (files)=> {
-    window.open(`http://localhost:8001/files/${files}`, "_blank", "noreferrer");
+    window.open(`${BACKEND_URL}/files/${files}`, "_blank", "noreferrer");
   };
 
   return (

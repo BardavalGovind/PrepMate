@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import TagInput from '../components/TagInput';
 import SpeechToText from './VoiceNote';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
@@ -20,7 +22,7 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
   const addNewNote = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8001/notes/add-note",
+        `${BACKEND_URL}/notes/add-note`,
         { title, content, tags, userId },
         {
           headers: {
@@ -43,7 +45,7 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
     try {
       const noteId = noteData._id;
       const response = await axios.put(
-        `http://localhost:8001/notes/edit-note/${noteId}`, 
+        `${BACKEND_URL}/notes/edit-note/${noteId}`, 
         { title, content, tags, userId },
         {
           headers: {
@@ -126,9 +128,3 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
 };
 
 export default AddEditNotes;
-
-
-
-
-
-
