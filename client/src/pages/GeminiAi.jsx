@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Send, Loader2, Trash, Plus } from "lucide-react";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const AIChat = () => {
   const [question, setQuestion] = useState("");
   const [chats, setChats] = useState([]);
@@ -38,7 +38,7 @@ const AIChat = () => {
   
     try {
       const res = await axios.post(
-        "http://localhost:8001/notes/AIcontent", 
+        `${BACKEND_URL}/notes/AIcontent`, 
         { question },
         {
           headers: {
@@ -46,6 +46,7 @@ const AIChat = () => {
           },
         }
       );
+      
       let aiResponse = res.data.result || "No response received.";
   
       const words = aiResponse.split(" ");
