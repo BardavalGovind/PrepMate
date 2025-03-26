@@ -12,6 +12,7 @@ const UploadNote = () => {
   const [tags, setTags] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
@@ -32,6 +33,7 @@ const UploadNote = () => {
     formData.append("userId", userId);
 
     try {
+      setLoading(true); 
       const token = localStorage.getItem("token");
       await axios.post(`${BACKEND_URL}/notes/upload`, formData, {
         headers: {
@@ -48,6 +50,8 @@ const UploadNote = () => {
       setError("");
     } catch (error) {
       toast.error("Failed to upload notes.");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -119,12 +123,22 @@ const UploadNote = () => {
           />
         </label>
 
-        <button
-          type="submit"
-          className="mt-4 w-full rounded-lg bg-blue-500 py-2 font-bold text-white hover:bg-blue-600 transition"
-        >
-          Submit
-        </button>
+        {/* Loader or Submit Button */}
+        {loading ? (
+          <button
+            disabled
+            className="mt-4 w-full rounded-lg bg-gray-500 py-2 font-bold text-white cursor-not-allowed"
+          >
+            Uploading...
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="mt-4 w-full rounded-lg bg-blue-500 py-2 font-bold text-white hover:bg-blue-600 transition"
+          >
+            Submit
+          </button>
+        )}
       </form>
     </div>
   );

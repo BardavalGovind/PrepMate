@@ -9,10 +9,6 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    // userBio: {
-    //     type: String,
-    //     required: true,
-    // },
     userEmail: {
         type: String,
         required: true,

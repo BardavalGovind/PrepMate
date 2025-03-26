@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Signup = () => {
   const [profilePreviewImage, setProfilePreviewImage] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -13,9 +15,12 @@ const Signup = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const registerUser = async (e) => {
     e.preventDefault();
+    setIsLoading(true); 
+
     try {
       const formData = new FormData();
       formData.append("firstName", firstName);
@@ -26,22 +31,23 @@ const Signup = () => {
       formData.append("userPassword", userPassword);
       formData.append("profileImage", profileImage);
 
-      const result = await axios.post(`${BACKEND_URL}/auth/signup`, formData, {
+      await axios.post(`${BACKEND_URL}/auth/signup`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       toast.success("User registered successfully!");
     } catch (error) {
       toast.error("Failed to register. Try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-orange-400 to-blue-400 px-4 p-4">
       <form className="w-full max-w-2xl bg-white rounded-xl p-10 shadow-lg border-2 border-white" onSubmit={registerUser}>
-
         <h1 className="mb-6 text-center text-4xl font-bold text-gray-700">Register</h1>
-        
+
         <div className="mb-6 grid grid-cols-2 gap-6">
           <div>
             <label className="block font-semibold" htmlFor="firstName">First Name</label>
@@ -62,7 +68,7 @@ const Signup = () => {
               onChange={(e) => setLastName(e.target.value)} />
           </div>
         </div>
-        
+
         <div className="mb-6">
           <label className="block font-semibold" htmlFor="userEmail">Email</label>
           <input
@@ -72,7 +78,7 @@ const Signup = () => {
               placeholder="your.email@example.com" 
               onChange={(e) => setUserEmail(e.target.value)} />
         </div>
-        
+
         <div className="mb-6">
           <label className="block font-semibold" htmlFor="userMobile">Mobile Number</label>
           <input
@@ -82,7 +88,7 @@ const Signup = () => {
            placeholder="0000000000" 
            onChange={(e) => setUserMobile(e.target.value)} />
         </div>
-        
+
         <div className="mb-6">
           <label className="block font-semibold" htmlFor="userName">Username</label>
           <input
@@ -92,7 +98,7 @@ const Signup = () => {
            placeholder="johndoe123" 
            onChange={(e) => setUserName(e.target.value)} />
         </div>
-        
+
         <div className="mb-6">
           <label className="block font-semibold" htmlFor="userPassword">Password</label>
           <input
@@ -102,7 +108,7 @@ const Signup = () => {
            placeholder="********" 
            onChange={(e) => setUserPassword(e.target.value)} />
         </div>
-        
+
         <div className="mb-6 flex flex-col items-center">
           <div className="mb-4 h-32 w-32 overflow-hidden rounded-full border-2 border-gray-300">
             {profilePreviewImage ? <img src={profilePreviewImage} alt="Profile" className="h-full w-full object-cover" /> : 
@@ -120,9 +126,26 @@ const Signup = () => {
             }} />
           </label>
         </div>
-        
-        <button className="w-full rounded-lg bg-blue-600 px-5 py-3 text-white font-bold hover:bg-blue-700 text-lg">Register</button>
-        
+
+        {/* Button with Loader */}
+        <button 
+          type="submit"
+          className="w-full rounded-lg bg-blue-600 px-5 py-3 text-white font-bold hover:bg-blue-700 text-lg flex justify-center items-center"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <svg className="w-6 h-6 mr-2 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              Processing...
+            </>
+          ) : (
+            "Register"
+          )}
+        </button>
+
         <p className="mt-6 text-center text-sm">Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Login</Link></p>
       </form>
     </div>

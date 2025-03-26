@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const NotesController = require("../Controllers/NotesController");
 const multer = require("multer");
-const authMiddleware = require('../middleware/authMiddleware')
+const authMiddleware = require('../middleware/authMiddleware');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

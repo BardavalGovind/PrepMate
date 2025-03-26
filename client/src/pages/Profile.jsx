@@ -12,28 +12,31 @@ const Profile = () => {
   const [userFiles, setUserFiles] = useState([]);
 
   useEffect(() => {
-    if (!userId) return;
-
+    console.log("User Data:", user); 
+    console.log("User ID:", userId); 
+  
+    if (!userId) {
+      console.error("User ID is missing");
+      return;
+    }
+  
     const getUserFiles = async () => {
-      try{
-        const token = localStorage.getItem('token');
-        const result = await axios.get(
-          `${BACKEND_URL}/notes/getFiles/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios.get(`${BACKEND_URL}/notes/getFiles/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUserFiles(result.data.data);
-      }
-      catch(error){
-        console.error('Error fetching files:', error.response?.data || error.message);
+      } catch (error) {
+        console.error("Error fetching files:", error.response?.data || error.message);
       }
     };
-
+  
     getUserFiles();
   }, [userId]);
+  
 
   const numberofUploads = userFiles.length;
   const numberofFiles = userFiles.reduce((count, file) => count + 1, 0);

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setUserData } from "../Redux/slices/user-slice";
-import { useNavigate, Link } from "react-router-dom"; 
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
@@ -14,13 +15,14 @@ const Login = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const loginUser = async (e) => {
     e.preventDefault();
+    setLoading(true); 
 
     try {
       const user = { userEmail, userPassword };
-      console.log(import.meta.env.VITE_BACKEND_URL);
       const response = await axios.post(`${BACKEND_URL}/auth/login`, user);
 
       const { token, user: userData } = response.data;
@@ -28,21 +30,22 @@ const Login = () => {
       localStorage.setItem("token", token);
       dispatch(setUserData(userData));
 
-      toast.success("User login successfully!");
+      toast.success("User logged in successfully!");
       navigate("/");
-
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setError("Unauthorized. Invalid credentials.");
       } else {
         setError("Something went wrong. Please try again.");
       }
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-orange-400 to-blue-400">
-      <form 
+      <form
         className="flex w-full max-w-[500px] flex-col gap-8 p-8 rounded-xl shadow-2xl border border-gray-200 backdrop-blur-md"
         onSubmit={loginUser}
       >
@@ -51,9 +54,10 @@ const Login = () => {
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         <div className="flex flex-col gap-6">
-
           <div className="flex flex-col">
-            <label className="font-medium text-black mb-2" htmlFor="userEmail">Email</label>
+            <label className="font-medium text-black mb-2" htmlFor="userEmail">
+              Email
+            </label>
             <input
               type="email"
               id="userEmail"
@@ -67,7 +71,9 @@ const Login = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="font-medium text-black mb-2" htmlFor="userPassword">Password</label>
+            <label className="font-medium text-black mb-2" htmlFor="userPassword">
+              Password
+            </label>
             <input
               type="password"
               id="userPassword"
@@ -81,11 +87,19 @@ const Login = () => {
           </div>
         </div>
 
-        <button 
-          type="submit" 
-          className="rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition duration-200 transform hover:scale-105 shadow-md"
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition duration-200 transform hover:scale-105 shadow-md flex items-center justify-center"
+          disabled={loading} // Disable button when loading
         >
-          Login
+          {loading ? (
+            <div className="flex items-center">
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+              Logging in...
+            </div>
+          ) : (
+            "Login"
+          )}
         </button>
 
         <div className="flex items-center justify-center text-sm text-black mt-4">

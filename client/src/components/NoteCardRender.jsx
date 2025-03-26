@@ -47,7 +47,7 @@ const NoteCardRender = () => {
       if (response.data?.notes) {
         const sortedNotes = response.data.notes.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn));
         setAllNotes(sortedNotes);
-        setFilteredNotes(sortedNotes); // Initially, filtered notes = all notes
+        setFilteredNotes(sortedNotes); 
       }
     } catch (error) {
       console.error("Error fetching notes:", error);
@@ -75,7 +75,7 @@ const NoteCardRender = () => {
     setSearchQuery(query);
     if (!query) {
       setIsSearch(false);
-      setFilteredNotes(allNotes); // Reset to all notes when search is cleared
+      setFilteredNotes(allNotes); 
     } else {
       setIsSearch(true);
       const filtered = allNotes.filter((note) =>
@@ -95,27 +95,30 @@ const NoteCardRender = () => {
       <div className="container mx-auto">
         {/* Search Bar */}
         <NotesSearch onSearch={onSearchNote} />
-
         {filteredNotes?.length > 0 ? (
-          <div className="grid grid-cols-3 gap-4 mt-8 mx-auto w-fit">
-            {filteredNotes.slice(0, 20).map((item) => ( // Limiting rendering to 20 notes for performance
-              <NoteCard
-                key={item._id}
-                title={item.title}
-                date={item.createdOn}
-                content={item.content}
-                tags={item.tags}
-                onEdit={() => setOpenAddEditModal({ isShown: true, data: item, type: "edit" })}
-                onDelete={() => deleteNote(item._id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <EmptyCard
-            imgSrc={AddNotesImg}
-            message="Start creating your first note! Click on the bottom right button to prepare notes. Let's get started!"
-          />
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-4 mt-8 mx-auto w-fit">
+          {filteredNotes.slice(0, 20).map((item) => (
+            <div className="flex justify-center">
+              <div className="w-[260px] h-[260px] sm:w-[280px] sm:h-[280px] md:w-[300px] md:h-[300px] lg:w-[320px] lg:h-[320px]  mb-8">
+                <NoteCard
+                  key={item._id}
+                  title={item.title}
+                  date={item.createdOn}
+                  content={item.content}
+                  tags={item.tags}
+                  onEdit={() => setOpenAddEditModal({ isShown: true, data: item, type: "edit" })}
+                  onDelete={() => deleteNote(item._id)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <EmptyCard
+          imgSrc={AddNotesImg}
+          message="Start creating your first note! Click on the bottom right button to prepare notes. Let's get started!"
+        />
+      )}
       </div>
 
       {/* Fixed Add Note Button */}
