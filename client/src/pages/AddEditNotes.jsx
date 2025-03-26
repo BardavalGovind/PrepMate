@@ -9,67 +9,45 @@ import SpeechToText from './VoiceNote';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => {
-  const [title, setTitle] = useState(noteData?.title || "");
-  const [content, setContent] = useState(noteData?.content || "");
+  const [title, setTitle] = useState(noteData?.title || '');
+  const [content, setContent] = useState(noteData?.content || '');
   const [tags, setTags] = useState(noteData?.tags || []);
   const [error, setError] = useState(null);
 
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
-
   const token = localStorage.getItem('token');
 
-  const addNewNote = async () => {
+  const handleApiRequest = async (apiCall, successMessage) => {
+    if (!title.trim()) return setError('Please enter the title');
+    if (!content.trim()) return setError('Please enter the content');
+
+    setError(null);
     try {
-      const response = await axios.post(
-        `${BACKEND_URL}/notes/add-note`,
-        { title, content, tags, userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data && response.data.note) {
-        setError(null);
-        showMessage("Note Added Successfully");
+      const response = await apiCall();
+      if (response?.data?.note) {
+        showMessage(successMessage);
         getAllNotes();
         onClose();
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Something went wrong");
+      setError(error.response?.data?.message || error.message || 'Something went wrong');
     }
   };
 
-  const editNote = async () => {
-    try {
-      const noteId = noteData._id;
-      const response = await axios.put(
-        `${BACKEND_URL}/notes/edit-note/${noteId}`, 
-        { title, content, tags, userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data && response.data.note) {
-        setError(null);
-        showMessage("Note Updated Successfully");
-        getAllNotes();
-        onClose();
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || "Something went wrong");
-    }
-  };
+  const addNewNote = () => handleApiRequest(
+    () => axios.post(`${BACKEND_URL}/notes/add-note`, { title, content, tags, userId }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+    'Note Added Successfully'
+  );
 
-  const handleAddOrEditNote = () => {
-    if (!title) return setError("Please enter the title");
-    if (!content) return setError("Please enter the content");
-    setError("");
-    type === "edit" ? editNote() : addNewNote();
-  };
+  const editNote = () => handleApiRequest(
+    () => axios.put(`${BACKEND_URL}/notes/edit-note/${noteData._id}`, { title, content, tags, userId }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+    'Note Updated Successfully'
+  );
 
   return (
     <div className="flex h-screen">
@@ -85,7 +63,7 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
           <div className="flex items-center gap-3 mb-6">
             <FaStickyNote className="text-3xl text-yellow-500" />
             <h2 className="text-gray-800 text-3xl font-bold text-center font-handwritten">
-              {type === "edit" ? "Edit Your Note" : "Create a New Note"}
+              {type === 'edit' ? 'Edit Your Note' : 'Create a New Note'}
             </h2>
           </div>
 
@@ -101,10 +79,10 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
             <textarea
               className="text-lg p-4 border rounded-xl focus:outline-none bg-white text-black"
               placeholder="Note Content"
-              rows="8"
+              rows="6"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              style={{ resize: "none" }}
+              style={{ resize: 'vertical' }}
             />
             <TagInput tags={tags} setTags={setTags} />
           </div>
@@ -114,9 +92,9 @@ const AddEditNotes = ({ noteData, type, onClose, showMessage, getAllNotes }) => 
           <div className="flex gap-4 justify-center mt-6">
             <button
               className="py-3 px-6 bg-blue-500 text-white rounded-xl shadow-lg hover:bg-blue-600 transition-all duration-300"
-              onClick={handleAddOrEditNote}
+              onClick={type === 'edit' ? editNote : addNewNote}
             >
-              {type === "edit" ? "Update Note" : "Add Note"}
+              {type === 'edit' ? 'Update Note' : 'Add Note'}
             </button>
 
             <SpeechToText setContent={setContent} />

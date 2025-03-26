@@ -4,6 +4,9 @@ import { GiNotebook } from 'react-icons/gi';
 import moment from 'moment';
 import Modal from 'react-modal';
 
+// Ensure the modal is properly accessible
+Modal.setAppElement('#root');
+
 const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -11,13 +14,14 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
   const synth = window.speechSynthesis;
 
   const speakOut = () => {
-    if (!isSpeaking) {
-      synth.cancel(); 
+    if (!isSpeaking && content.trim()) {
+      synth.cancel();
       const utterance = new SpeechSynthesisUtterance(content);
       utterance.lang = 'en-US';
 
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false); // Handles errors
 
       synth.speak(utterance);
     }
@@ -41,15 +45,19 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
         </div>
 
         <div className="text-xs text-gray-200 flex flex-wrap gap-1 mt-4 justify-center">
-          {tags.map((item, index) => (
-            <span key={index} className="bg-white bg-opacity-30 text-white py-1 px-2 rounded-full">
-              #{item}
-            </span>
-          ))}
+          {tags?.length > 0 ? (
+            tags.map((item, index) => (
+              <span key={index} className="bg-white bg-opacity-30 text-white py-1 px-2 rounded-full">
+                #{item}
+              </span>
+            ))
+          ) : (
+            <span className="text-gray-400 italic">No Tags</span>
+          )}
         </div>
 
         <div className="flex items-center justify-between mt-4">
-          <div 
+          <div
             className="text-center text-blue-600 font-bold text-lg cursor-pointer hover:text-yellow-300 transition-all duration-300 animate-pulse"
             onClick={() => setModalIsOpen(true)}
           >
@@ -58,22 +66,21 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
 
           <div className="flex gap-4">
             <MdCreate
-              className="text-xl text-green-600 cursor-pointer hover:text-green-600 transition-all duration-200"
+              className="text-xl text-green-600 cursor-pointer hover:text-green-800 transition-all duration-200"
               onClick={onEdit}
             />
             <MdDelete
-              className="text-xl text-red-600 cursor-pointer hover:text-red-600 transition-all duration-200"
+              className="text-xl text-red-600 cursor-pointer hover:text-red-800 transition-all duration-200"
               onClick={onDelete}
             />
           </div>
         </div>
       </div>
 
-      <Modal 
-        isOpen={modalIsOpen} 
+      <Modal
+        isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
-        className="w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 mx-auto top-40 relative"
-
+        className="w-2/3 max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6 relative mt-20"
         style={{ overlay: { backgroundColor: 'rgba(0, 0, 0, 0.5)' } }}
       >
         <h2 className="text-xl font-bold text-gray-800 text-center">{title}</h2>
@@ -82,7 +89,7 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
 
         {/* Buttons centered at the bottom */}
         <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4">
-          <button 
+          <button
             className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition duration-200"
             onClick={speakOut}
             disabled={isSpeaking}
@@ -90,14 +97,14 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
             Listen
           </button>
           {isSpeaking && (
-            <button 
+            <button
               className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-200"
               onClick={stopSpeaking}
             >
               Stop Listening
             </button>
           )}
-          <button 
+          <button
             className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-200"
             onClick={() => setModalIsOpen(false)}
           >
@@ -110,6 +117,3 @@ const NoteCard = ({ title, date, content, tags, onEdit, onDelete }) => {
 };
 
 export default NoteCard;
-
-
-
