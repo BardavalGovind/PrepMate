@@ -37,16 +37,18 @@ const AIChat = () => {
     setQuestion("");
   
     try {
+      console.log(BACKEND_URL); // Log before making the request
+  
       const res = await axios.post(
-        `${BACKEND_URL}/notes/AIcontent`, 
+        `${BACKEND_URL}/notes/AIcontent`,
         { question },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      
+  
       let aiResponse = res.data.result || "No response received.";
   
       const words = aiResponse.split(" ");
@@ -55,7 +57,7 @@ const AIChat = () => {
       words.forEach((word, index) => {
         setTimeout(() => {
           currentText += word + " ";
-          
+  
           let formattedText = formatResponse(currentText);
   
           setChats((prevChats) => {
@@ -80,6 +82,7 @@ const AIChat = () => {
       setLoading(false);
     }
   };
+  
   
 
   const formatResponse = (text) => {
