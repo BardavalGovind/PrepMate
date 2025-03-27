@@ -64,7 +64,8 @@ const NoteCardRender = () => {
 
       setAllNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
       setFilteredNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
-      showMessage("Note Deleted Successfully", "delete");
+      setShowMsg({ isShown: true, message: "Note Deleted Successfully", type: "delete" });
+
     } catch (error) {
       console.error("Error deleting the note:", error);
     }

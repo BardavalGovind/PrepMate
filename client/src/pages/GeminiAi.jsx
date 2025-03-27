@@ -38,8 +38,7 @@ const AIChat = () => {
     setLoading(true);
     setQuestion("");
   
-    try {
-      console.log(BACKEND_URL); 
+    try { 
   
       const res = await axios.post(
         `${BACKEND_URL}/notes/AIcontent`,
