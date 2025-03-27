@@ -10,6 +10,8 @@ const AIChat = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const chatContainerRef = useRef(null);
 
+   const token = localStorage.getItem("token");
+
   useEffect(() => {
     const storedHistory = localStorage.getItem("chatHistory");
     if (storedHistory) setHistory(JSON.parse(storedHistory));
@@ -18,7 +20,7 @@ const AIChat = () => {
   useEffect(() => {
     localStorage.setItem("chatHistory", JSON.stringify(history));
   }, [history]);
-  const token = localStorage.getItem('token');
+
 
   useEffect(() => {
     chatContainerRef.current?.scrollTo({
@@ -37,7 +39,7 @@ const AIChat = () => {
     setQuestion("");
   
     try {
-      console.log(BACKEND_URL); // Log before making the request
+      console.log(BACKEND_URL); 
   
       const res = await axios.post(
         `${BACKEND_URL}/notes/AIcontent`,
@@ -45,6 +47,7 @@ const AIChat = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -82,8 +85,6 @@ const AIChat = () => {
       setLoading(false);
     }
   };
-  
-  
 
   const formatResponse = (text) => {
     return text
