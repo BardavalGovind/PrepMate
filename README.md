@@ -40,5 +40,7 @@ https://prepmateai.vercel.app/
 
 Screenshots
 ![Home page](Home.png)
+![Login page](Login.png)
+
 
 
