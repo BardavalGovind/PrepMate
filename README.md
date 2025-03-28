@@ -41,6 +41,14 @@ https://prepmateai.vercel.app/
 Screenshots
 ![Home page](Home.png)
 ![Login page](Login.png)
+![Login page](Footer.png)
+![Login page](pdf_view.png)
+![Login page](Handwrittennotes.png)
+![Login page](notes_add.png)
+![Login page](notes_view.png)
+![Login page](ai.png)
+
+
 
 
 
