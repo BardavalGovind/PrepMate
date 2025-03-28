@@ -5,8 +5,11 @@ PrepMate is a feature-rich notes management platform designed to enhance the not
 The platform supports PDF uploads, real-time document viewing, and leverages AI-powered Gemini AI for personalized study recommendations, resulting in a 35% improvement in user engagement.
 
 Features
+
 📝 Create, Read, Update, and Delete (CRUD) notes.
+
 📄 PDF upload and viewing functionality.
+
 🎙 Speech-to-text for voice-based note-taking.
 🔊 Text-to-speech for accessibility support.
 🤖 AI-powered study recommendations via Gemini AI.
