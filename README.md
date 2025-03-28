@@ -39,5 +39,6 @@ Live Demo
 https://prepmateai.vercel.app/
 
 Screenshots
+https://github.com/BardavalGovind/PrepMate/blob/088cb6b5d015c35992ff9a85cd961e592a0a28c5/Screenshot%202025-03-28%20201650.png
 
 
