@@ -11,11 +11,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://prepmateai.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(express.json());
 
-// MongoDB Connection
 const connectDb = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URL);
