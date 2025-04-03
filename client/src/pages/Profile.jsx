@@ -12,9 +12,6 @@ const Profile = () => {
   const [userFiles, setUserFiles] = useState([]);
 
   useEffect(() => {
-    console.log("User Data:", user); 
-    console.log("User ID:", userId); 
-  
     if (!userId) {
       console.error("User ID is missing");
       return;

@@ -4,14 +4,12 @@ import React, { useState } from "react";
      const [searchQuery, setSearchQuery] = useState("");
  
      const handleSearch = () => {
-         console.log("Search button clicked with query:", searchQuery);
          if(searchQuery){
              onSearch(searchQuery);
          }
      };
  
      const onClearSearch = () => {
-         console.log("Clear button clicked");
          setSearchQuery("");
          onSearch("");
      }
