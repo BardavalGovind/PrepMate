@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors({
     origin: 'https://prepmateai.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 app.use(bodyParser.json());
