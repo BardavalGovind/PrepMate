@@ -11,7 +11,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+    origin: "https://prepmateai.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  }));
+  
+
 app.use(bodyParser.json());
 app.use(express.json());
 
@@ -25,7 +32,7 @@ const connectDb = async () => {
 connectDb();
 app.get("/", (req, res) => {
     res.send("Backend is running!");
-  });
+});
   
 app.use("/auth", authRoutes);
 app.use("/notes", noteRoutes);
