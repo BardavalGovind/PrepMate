@@ -11,12 +11,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// app.use(cors());
-app.use(cors({
+const corsOptions = {
     origin: "https://prepmateai.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
-  }));
+};
+app.use(cors(corsOptions));
   
 
 app.use(bodyParser.json());
