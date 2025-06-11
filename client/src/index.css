@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@layer utilities {
+  .animate-gradient-1 {
+    animation: gradient-animation 15s ease infinite;
+    background-size: 400% 400%;
+  }
+}
+.hover-text-orange:hover {
+  color: #FFA500; 
+  transform: translateY(-3px); 
+  background-color: rgba(255, 165, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+/* Navbar blurred background */
+.navbar {
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(10px);
+}
+
+/* Button hover effect with blue color */
+.navbar .hover-blue:hover {
+  color: #1D4ED8; 
+  background-color: rgba(29, 78, 216, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+/* Hide scrollbars globally */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;   
+}
+
+body {
+  padding-top: 80px;
+}
+
+/* Adjusting arrow size and animation */
+@keyframes arrowAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4mm); 
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+
+.animate-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: arrowAnimation 1s infinite ease-in-out;
+}
+
+/* Adding delay for each arrow */
+.animate-arrow span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.animate-arrow span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animate-arrow span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@layer components {
+  .note-card {
+    @apply relative overflow-hidden transition-all duration-300 hover:shadow-lg;
+  }
+
+  .note-card::after {
+    content: '';
+    @apply absolute -right-20 -top-20 w-40 h-40 bg-blue-900 opacity-15 rounded-full transition-all duration-500;
+    
+  }
+
+  .note-card:hover::after {
+    @apply -right-10 -top-10 w-60 h-60 opacity-20;
+  }
+}
