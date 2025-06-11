@@ -11,7 +11,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const userId = customUser?._id;
-  // console.log("User ID in profile:", userId);
+ 
 
   useEffect(() => {
     if (!userId) return;
@@ -26,8 +26,7 @@ const Profile = () => {
         });
         console.log(`${BACKEND_URL}/notes/getFiles/${userId}`);
         setUserFiles(response.data.data);
-        console.log("Fetched files :", response.data.data);
-
+      
         setUserFiles(response.data.data);
       } catch (error) {
         setError(error.response?.data?.message || error.message || "Failed to fetch files");

@@ -111,7 +111,6 @@ const addNote = async (req, res) => {
             userId,
         });
         await newNote.save();
-
         
         return res.json({
             error: false,
