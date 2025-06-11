@@ -46,8 +46,7 @@ const uploadNote = async (req, res) => {
         file: file,
         uploadedBy: uploadedBy,
       });
-      console.log("File name:", fileName);
-      console.log("File uploaded:", newFile);
+      
       await newFile.save();
       res.send({ status: "Ok" });
   
