@@ -46,7 +46,18 @@ const ReadingMode = () => {
     setIsSpeaking(false);
   };
 
-  if (!note) return <div>Loading...</div>;
+  if (!note) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-200 to-indigo-200 z-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <p className="text-lg font-semibold text-gray-700">Loading Note...</p>
+        <p className="text-sm text-gray-500 mt-1">Please wait while we fetch your note</p>
+      </div>
+    </div>
+  );
+}
+
 
   const backgroundClass = "bg-gradient-to-br from-blue-200 to-indigo-200";
 
