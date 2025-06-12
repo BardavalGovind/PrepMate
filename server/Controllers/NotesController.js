@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
-const FileNotes = require("../Models/Notes");
-const TextNotes = require("../Models/CreateNote");
+const FileNotes = require("../models/Notes");
+const TextNotes = require("../models/CreateNote");
 const multer = require("multer");
 dotenv.config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
