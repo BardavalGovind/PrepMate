@@ -9,7 +9,7 @@ const noteRoutes = require("./Routes/notes");
 dotenv.config(); 
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 app.use(cors());
 
