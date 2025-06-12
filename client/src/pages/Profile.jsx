@@ -24,7 +24,6 @@ const Profile = () => {
         const response = await axios.get(`${BACKEND_URL}/notes/getFiles/${userId}`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
-        console.log(`${BACKEND_URL}/notes/getFiles/${userId}`);
         setUserFiles(response.data.data);
       
         setUserFiles(response.data.data);

@@ -36,7 +36,6 @@ const CreateNote = () => {
 
       if (response?.data?.note) {
         toast.success("Note added successfully");
-        console.log("Note added successfully:", response.data.note);
         navigate("/notecardrender");
       }
     } catch (error) {

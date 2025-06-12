@@ -100,7 +100,7 @@ const SearchBar = () => {
                 <span className='font-bold'>File name: </span>
                 <span>{notes.fileName}</span>
               </p>
-              <button onClick={() => showPDF(notes.files)}>Show PDF</button>
+              <button onClick={() => showPDF(notes.file)}>Show PDF</button>
             </div>
           ))}
         </div>
