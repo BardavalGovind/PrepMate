@@ -128,7 +128,6 @@ const Login = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {/* Eye icons remain the same */}
                 {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -163,6 +162,38 @@ const Login = () => {
             ) : (
               "Sign In"
             )}
+          </motion.button>
+
+          {/* Guest Login Button */}
+          <motion.button
+            variants={itemVariants}
+            type="button"
+            onClick={async () => {
+              setError("");
+              try {
+                setLoading(true);
+                const guestUser = {
+                  userEmail: "email@gmail.com",
+                  userPassword: "email123",
+                };
+                const response = await axios.post(`${BACKEND_URL}/auth/login`, guestUser);
+
+                const { token, user: userData } = response.data;
+                localStorage.setItem("token", token);
+                dispatch(setUserData(userData));
+                toast.success("Logged in as Guest");
+                navigate("/");
+              } catch (error) {
+                toast.error("Guest login failed.");
+              } finally {
+                setLoading(false);
+              }
+            }}
+            className="w-full mt-3 rounded-lg bg-gray-200 px-5 py-3.5 text-gray-700 font-medium hover:bg-gray-300 transition-all duration-200 shadow-md flex justify-center items-center"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Try as Guest
           </motion.button>
 
           {/* Sign Up Link */}

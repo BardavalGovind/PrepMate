@@ -39,14 +39,15 @@ const App = () => {
           <Route path='/' element={<Home />} />
           {isAuthenticated ? (
             <>
-              <Route path='/profile' element={<Profile />} />
-              <Route path='/upload' element={<Upload />} />
-              <Route path='/search' element={<Search />} />
-              <Route path='/notecardrender' element={<NoteCardRender />} />
-              <Route path='/geminiai' element={<AIChat />} />
-              <Route path='/AddEditNotes' element={<AddEditNotes />} />
+              <Route path='/Userprofile' element={<Profile />} />
+              <Route path='/uploadFile' element={<Upload />} />
+              <Route path='/searchFile' element={<Search />} />
+              <Route path='/ViewTextNotes' element={<NoteCardRender />} />
+              <Route path='/ai' element={<AIChat />} />
+              <Route path='/notes/addnew' element={<AddEditNotes type="add" />} />
+              <Route path='/notes/edit/:id' element={<AddEditNotes type="edit" />} />
               <Route path='/CreateNote' element={<CreateNote />} />
-              <Route path='/notes/:id' element={<ReadingMode />} />
+              <Route path='/notes/read/:id' element={<ReadingMode />} />
             </>
           ) : (
             <>

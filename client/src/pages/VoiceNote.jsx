@@ -51,14 +51,14 @@ const SpeechToText = ({ setContent }) => {
         type="button"
         onClick={startListening}
         className={`w-32 h-12 text-lg font-semibold flex items-center justify-center rounded-xl shadow-md transition-all duration-300 
-          ${listening ? "bg-green-600 text-white" : "bg-green-500 hover:bg-green-600 text-white"}`}
+          ${listening ? "bg-blue-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
       >
         Speak Out
       </button>
       <button
         type="button"
         onClick={stopListening}
-        className="w-32 h-12 text-lg font-semibold flex items-center justify-center rounded-xl shadow-md bg-red-500 hover:bg-red-600 text-white transition-all duration-300"
+        className="w-32 h-12 text-lg font-semibold flex items-center justify-center rounded-xl shadow-md bg-orange-500 hover:bg-red-600 text-white transition-all duration-300"
       >
         Stop
       </button>

@@ -2,27 +2,23 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Book } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import AddEditNotes from "../pages/AddEditNotes";
+
 import NoteCard from "../pages/NoteCard";
 import EmptyCard from "./EmptyCard/EmptyCard";
 import AddNotesImg from "../images/addnote.jpg";
 import NotesSearch from "./NotesSearch";
-import ReadingMode from "../pages/ReadingMode";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const NoteCardRender = () => {
-  const [showAddEditNote, setShowAddEditNote] = useState(false);
-  const [selectedNote, setSelectedNote] = useState(null);
   const [allNotes, setAllNotes] = useState([]);
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isReadingModeOpen, setIsReadingModeOpen] = useState(false);
-  const [currentNote, setCurrentNote] = useState(null);
-  const [isSpeaking, setIsSpeaking] = useState(false);
 
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
   const token = localStorage.getItem("token");
@@ -76,57 +72,17 @@ const NoteCardRender = () => {
     }
   };
 
-  const openReadingMode = (note) => {
-    setCurrentNote(note);
-    setIsReadingModeOpen(true);
-  };
-
-  const speakOut = () => {
-    if (currentNote?.content) {
-      speechSynthesis.cancel();
-      const speech = new SpeechSynthesisUtterance(currentNote.content);
-      speechSynthesis.speak(speech);
-      setIsSpeaking(true);
-      speech.onend = () => setIsSpeaking(false);
-    }
-  };
-
-  const stopSpeaking = () => {
-    speechSynthesis.cancel();
-    setIsSpeaking(false);
-  };
-
   useEffect(() => {
     getAllNotes();
   }, [getAllNotes]);
-
-  if (showAddEditNote) {
-    return (
-      <div className="container mx-auto">
-        <AddEditNotes
-          noteData={selectedNote}
-          type={selectedNote ? "edit" : "add"}
-          onClose={() => {
-            setShowAddEditNote(false);
-            setSelectedNote(null);
-          }}
-          showMessage={(msg) => toast.success(msg)}
-          getAllNotes={getAllNotes}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="container px-4 mx-auto max-w-6xl py-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold font-serif">Browse Notes</h1>
         <button
-          onClick={() => {
-            setSelectedNote(null);
-            setShowAddEditNote(true);
-          }}
-          className="inline-flex items-center bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-500 transition"
+          onClick={() => navigate("/notes/addnew")}
+          className="inline-flex items-center bg-gradient-to-r from-orange-500 to-blue-500 text-white px-4 py-2 rounded transition"
         >
           <Book className="mr-2 h-4 w-4" />
           Start a New Note
@@ -146,12 +102,9 @@ const NoteCardRender = () => {
                 title={item.title}
                 date={item.createdOn}
                 content={item.content}
-                onEdit={() => {
-                  setSelectedNote(item);
-                  setShowAddEditNote(true);
-                }}
+                onEdit={() => navigate(`/notes/edit/${item._id}`)}
                 onDelete={() => deleteNote(item._id)}
-                onClick={openReadingMode}
+                onClick={() => navigate(`/notes/read/${item._id}`)}
               />
             </div>
           ))}
@@ -165,20 +118,6 @@ const NoteCardRender = () => {
             subtitle="Try adding some notes to get started."
           />
         </div>
-      )}
-
-      {isReadingModeOpen && currentNote && (
-        <ReadingMode
-          title={currentNote.title}
-          content={currentNote.content}
-          onClose={() => {
-            setIsReadingModeOpen(false);
-            stopSpeaking();
-          }}
-          isSpeaking={isSpeaking}
-          speakOut={speakOut}
-          stopSpeaking={stopSpeaking}
-        />
       )}
     </div>
   );

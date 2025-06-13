@@ -38,7 +38,7 @@ const UploadNote = () => {
         },
       });
 
-      toast.success("Notes Uploaded Successfully!");
+      toast.success(`${title} uploaded successfully!`);
       setTitle("");
       setFile(null);
       setError("");

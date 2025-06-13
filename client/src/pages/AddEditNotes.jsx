@@ -1,22 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import SpeechToText from "./VoiceNote";
 import RichTextEditor from "../components/RichTextEditor";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const AddEditNotes = ({ noteData = {}, type, onClose, showMessage, getAllNotes }) => {
-  const [title, setTitle] = useState(noteData?.title || "");
-  const [content, setContent] = useState(noteData?.content || "");
+const AddEditNotes = ({ type }) => {
+  const { id } = useParams();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(type === "edit");
 
   const user = useSelector((state) => state.user.userData);
   const userId = user?._id;
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type === "edit" && id) {
+      axios
+        .get(`${BACKEND_URL}/notes/get-handwritten-note/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },  
+        })
+        .then((res) => {
+          const note = res.data.note;
+          setTitle(note.title);
+          setContent(note.content);
+          setLoading(false);
+        })
+        .catch((err) => {
+          toast.error("Failed to load note");
+          setLoading(false);
+        });
+    }
+  }, [type, id, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +50,7 @@ const AddEditNotes = ({ noteData = {}, type, onClose, showMessage, getAllNotes }
     try {
       const url =
         type === "edit"
-          ? `${BACKEND_URL}/notes/edit-note/${noteData._id}`
+          ? `${BACKEND_URL}/notes/edit-note/${id}`
           : `${BACKEND_URL}/notes/add-note`;
 
       const method = type === "edit" ? "put" : "post";
@@ -41,21 +62,30 @@ const AddEditNotes = ({ noteData = {}, type, onClose, showMessage, getAllNotes }
       );
 
       if (data?.note) {
-        type === "edit"
-          ? showMessage?.("Note Updated Successfully")
-          : toast.success("Note added successfully");
-
-        getAllNotes?.();
-        onClose?.() || navigate("/notecardrender");
+        toast.success(
+          type === "edit" ? "Note Updated Successfully" : "Note Added Successfully"
+        );
+        navigate("/ViewTextNotes");
       }
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Something went wrong");
     }
   };
 
+  if (loading) return <div className="text-center mt-10 text-lg">Loading...</div>;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 md:px-8">
-      <div className="max-w-3xl w-full bg-white rounded-2xl shadow-md border border-gray-200 p-8 relative">
+    <div className="min-h-screen bg-gray-50 px-4 sm:px-6 md:px-8 py-8">
+      <div className="fixed top-[88px] left-4 z-40">
+        <button
+          onClick={() => navigate("/ViewTextNotes")}
+          className="min-w-[120px] px-5 py-2 bg-gradient-to-r from-orange-500 to-blue-200 text-white rounded-full hover:opacity-90 transition-all duration-200 shadow-sm text-sm sm:text-base"
+        >
+          Back
+        </button>
+      </div>
+
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md border border-gray-200 p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-serif mb-2 text-gray-900">
             {type === "edit" ? "Edit Note" : "Create a New Note"}
@@ -100,7 +130,7 @@ const AddEditNotes = ({ noteData = {}, type, onClose, showMessage, getAllNotes }
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
             <button
               type="submit"
-              className="w-full sm:w-1/2 px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300"
+              className="w-full sm:w-1/2 px-6 py-3 bg-gradient-to-r from-orange-500 to-blue-400 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300"
             >
               {type === "edit" ? "Update Note" : "Add Note"}
             </button>

@@ -25,11 +25,11 @@ const Navbar = () => {
   };
 
   const authRoutes = [
-    { to: "/notecardrender", label: "BrowseNotes" },
-    { to: "/geminiai", label: "Ask AI" },
-    { to: "/search", label: "Search" },
-    { to: "/upload", label: "Upload" },
-    { to: "/profile", label: "Profile" },
+    { to: "/ViewTextNotes", label: "BrowseNotes" },
+    { to: "/ai", label: "Ask AI" },
+    { to: "/searchFile", label: "Search" },
+    { to: "/uploadFile", label: "Upload" },
+    { to: "/Userprofile", label: "Profile" },
   ];
 
   return (
