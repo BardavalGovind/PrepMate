@@ -1,8 +1,9 @@
-import { useSelector } from 'react-redux';
+import { useAuth } from "../context/auth";
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const [auth] = useAuth();
+  const isAuthenticated = !!auth?.token;
 
   return (
     <div className="relative flex h-screen items-center justify-center bg-gradient-to-b from-orange-400 to-blue-800 shadow-xl overflow-hidden">

@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Send, Loader2, Trash, Plus } from "lucide-react";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const AIChat = () => {
   const [question, setQuestion] = useState("");
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
-
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     chatContainerRef.current?.scrollTo({
@@ -27,14 +26,12 @@ const AIChat = () => {
     setQuestion("");
 
     try { 
-  
       const res = await axios.post(
         `${BACKEND_URL}/notes/AIcontent`,
         { question },
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
           },
         }
       );

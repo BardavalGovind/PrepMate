@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useAuth } from "../context/auth";
 import { useNavigate, useParams } from "react-router-dom";
 import SpeechToText from "./VoiceNote";
 import RichTextEditor from "../components/RichTextEditor";
@@ -15,28 +15,30 @@ const AddEditNotes = ({ type }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(type === "edit");
 
-  const user = useSelector((state) => state.user.userData);
-  const userId = user?._id;
-  const token = localStorage.getItem("token");
+  const [auth] = useAuth();
+  const userId = auth?.user?._id;
+  const token = auth?.token;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (type === "edit" && id) {
-      axios
-        .get(`${BACKEND_URL}/notes/get-handwritten-note/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },  
-        })
-        .then((res) => {
+    const fetchNote = async ()=>{
+      if(type === "edit" && id){
+        try{
+          const res = await axios.get(`${BACKEND_URL}/notes/get-handwritten-note/${id}`);
+
           const note = res.data.note;
           setTitle(note.title);
           setContent(note.content);
+        }
+        catch(error){
+          toast.error("Failed to load note")
+        }
+        finally{
           setLoading(false);
-        })
-        .catch((err) => {
-          toast.error("Failed to load note");
-          setLoading(false);
-        });
-    }
+        }
+      }
+    };
+    fetchNote();
   }, [type, id, token]);
 
   const handleSubmit = async (e) => {
@@ -58,7 +60,6 @@ const AddEditNotes = ({ type }) => {
       const { data } = await axios[method](
         url,
         { title, content: plainText, userId },
-        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (data?.note) {

@@ -86,7 +86,6 @@ const login = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 userEmail: user.userEmail,
-                profileImage: user.profileImage || null
             }
         });
 

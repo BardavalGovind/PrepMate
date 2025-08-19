@@ -17,19 +17,19 @@ import AIChat from './pages/GeminiAi';
 import CreateNote from './pages/CreateNote';
 import ReadingMode from './pages/ReadingMode';
 import AddEditNotes from './pages/AddEditNotes';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from './Redux/slices/user-slice';
+import { useAuth } from './context/auth';
 import axios from 'axios';
 
 const App = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  
+  const [auth] = useAuth();
+  const isAuthenticated = !!auth?.token;
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    if (auth?.token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
     }
-  }, []);
+  }, [auth?.token]);
 
   return (
     <>

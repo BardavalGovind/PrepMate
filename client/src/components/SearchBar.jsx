@@ -18,7 +18,6 @@ const SearchBar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState("");
 
-  const token = localStorage.getItem('token');
 
   const fetchNotes = async (query) => {
     if (!query.trim()) {
@@ -30,7 +29,6 @@ const SearchBar = () => {
     try {
       const res = await axios.get(`${BACKEND_URL}/notes/getFiles`, {
         params: { title: query },
-        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.data.data.length > 0) {

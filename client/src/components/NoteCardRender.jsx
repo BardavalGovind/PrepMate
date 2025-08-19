@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useAuth } from "../context/auth";
 import { Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
 import NoteCard from "../pages/NoteCard";
 import EmptyCard from "./EmptyCard/EmptyCard";
 import AddNotesImg from "../images/addnote.jpg";
@@ -19,16 +18,14 @@ const NoteCardRender = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.userData);
-  const userId = user?._id;
-  const token = localStorage.getItem("token");
+  const [auth] = useAuth();
+  const userId = auth?.user?._id;
 
   const getAllNotes = useCallback(async () => {
     if (!userId) return;
     try {
       const response = await axios.get(`${BACKEND_URL}/notes/get-all-notes`, {
         params: { userId },
-        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data?.notes) {
@@ -41,13 +38,12 @@ const NoteCardRender = () => {
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
-  }, [userId, token]);
+  }, [userId]);
 
   const deleteNote = async (noteId) => {
     try {
       await axios.delete(`${BACKEND_URL}/notes/delete-note/${noteId}`, {
         data: { userId },
-        headers: { Authorization: `Bearer ${token}` },
       });
 
       setAllNotes((prev) => prev.filter((note) => note._id !== noteId));

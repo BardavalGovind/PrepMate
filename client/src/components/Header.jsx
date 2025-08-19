@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useDispatch, useSelector } from "react-redux";
-import { clearUserData } from "../Redux/slices/user-slice";
+import { useAuth } from "../context/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const [auth, setAuth] = useAuth();
+  const isAuthenticated = !!auth?.token;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(clearUserData());
-    toast.success("User successfully logout");
+    setAuth({ user: null, token: "" });
+    localStorage.removeItem("auth");
+    toast.success("User successfully logged out");
     navigate("/");
     setIsMenuOpen(false);
   };

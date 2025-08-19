@@ -15,12 +15,7 @@ const ReadingMode = () => {
   const contentRef = useRef(null);
 
   useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/notes/get-handwritten-note/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+    axios.get(`${BACKEND_URL}/notes/get-handwritten-note/${id}`)
       .then((res) => setNote(res.data.note))
       .catch((err) => {
         console.error(err);
@@ -57,7 +52,6 @@ const ReadingMode = () => {
     </div>
   );
 }
-
 
   const backgroundClass = "bg-gradient-to-br from-blue-200 to-indigo-200";
 

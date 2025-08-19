@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import axios from "axios";
-import { setUserData } from "../Redux/slices/user-slice";
+import { useAuth } from "../context/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
@@ -10,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
 
   const [userEmail, setUserEmail] = useState("");
@@ -29,8 +28,10 @@ const Login = () => {
       const response = await axios.post(`${BACKEND_URL}/auth/login`, user);
 
       const { token, user: userData } = response.data;
-      localStorage.setItem("token", token);
-      dispatch(setUserData(userData));
+
+       localStorage.setItem("auth", JSON.stringify({ token, user: userData }));
+      
+      setAuth({ token, user: userData });
 
       toast.success("Welcome back! Redirecting...");
       navigate("/");

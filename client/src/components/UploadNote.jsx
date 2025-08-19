@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import { useState } from "react";
+import { useAuth } from "../context/auth"
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,8 +12,8 @@ const UploadNote = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const user = useSelector((state) => state.user.userData);
-  const userId = user?._id;
+  const [auth] = useAuth();
+  const userId = auth?.user?._id;
 
   const submitFile = async (e) => {
     e.preventDefault();
@@ -30,11 +30,9 @@ const UploadNote = () => {
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
       await axios.post(`${BACKEND_URL}/notes/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
         },
       });
 

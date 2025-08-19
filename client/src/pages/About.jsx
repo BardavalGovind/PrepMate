@@ -37,31 +37,31 @@ const About = () => {
               icon: "📂",
               title: "Upload & Organize",
               desc: "Upload and manage all your study notes in one place.",
-              // color: "text-orange-600",
+              
             },
             {
               icon: "🔎",
               title: "Search Effortlessly",
               desc: "Find any document quickly with our smart search feature.",
-              // color: "text-blue-600",
+           
             },
             {
               icon: "📝",
               title: "Voice & Text Notes",
               desc: "Type or use voice-to-text to create notes instantly.",
-              // color: "text-orange-600",
+             
             },
             {
               icon: "🎙️",
               title: "Text-to-Speech",
               desc: "Listen to your notes using the Read Aloud feature.",
-              // color: "text-blue-600",
+             
             },
             {
               icon: "🤖",
               title: "AI-Powered Assistance",
               desc: "Get help from Gemini AI to summarize and improve your notes.",
-              // color: "text-orange-500",
+          
             },
           ].map((feature, index) => (
             <div key={index} className="flex items-start space-x-3">

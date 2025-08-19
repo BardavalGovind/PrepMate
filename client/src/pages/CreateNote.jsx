@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useAuth } from "../context/auth";
 import SpeechToText from "./VoiceNote";
 import RichTextEditor from "../components/RichTextEditor";
 import { toast } from "react-toastify";
@@ -14,23 +14,23 @@ const CreateNote = () => {
   const [content, setContent] = useState("");
   const [error, setError] = useState(null);
 
-  const user = useSelector((state) => state.user.userData);
-  const userId = user?._id;
-  const token = localStorage.getItem("token");
+  const [auth] = useAuth();
+  const userId = auth?.user?._id;
+
   const navigate = useNavigate();
 
   const handleAddNote = async (e) => {
     e.preventDefault();
+
+    const plainText = content.replace(/<[^>]*>/g, '');
     if (!title.trim()) return setError("Please enter the title");
     if (!content.trim()) return setError("Please enter the content");
-    const plainText = content.replace(/<[^>]*>/g, '');
 
     setError(null);
     try {
       const response = await axios.post(
         `${BACKEND_URL}/notes/add-note`,
-        { title, content: plainText, userId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { title, content: plainText, userId }
       );
 
       if (response?.data?.note) {
@@ -46,7 +46,7 @@ const CreateNote = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 md:px-8">
       <div className="max-w-3xl w-full bg-white rounded-2xl shadow-md border border-gray-200 p-8">
         
-        {/* ✅ Back button inside visible block */}
+       
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}

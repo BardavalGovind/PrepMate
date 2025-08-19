@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useAuth } from "../context/auth";
 import axios from "axios";
 import defaultProfile from "../images/profile.png";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Profile = () => {
-  const customUser = useSelector((state) => state.user.userData);
+  const [auth] = useAuth();
+  const customUser = auth?.user;
   const [userFiles, setUserFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const userId = customUser?._id;
- 
 
   useEffect(() => {
     if (!userId) return;
 
     const fetchFiles = async () => {
       try {
-        const authToken = localStorage.getItem("token");
+        const authToken = auth?.token;
         if (!authToken) throw new Error("No token found");
 
-        const response = await axios.get(`${BACKEND_URL}/notes/getFiles/${userId}`, {
-          headers: { Authorization: `Bearer ${authToken}` }
-        });
+        const response = await axios.get(`${BACKEND_URL}/notes/getFiles/${userId}`);
         setUserFiles(response.data.data);
       
         setUserFiles(response.data.data);
@@ -35,7 +33,7 @@ const Profile = () => {
     };
 
     fetchFiles();
-  }, [userId]);
+  }, [userId, auth?.token]);
 
   if (!customUser) return <div className="flex justify-center items-center h-screen"><p>Loading profile...</p></div>;
 
