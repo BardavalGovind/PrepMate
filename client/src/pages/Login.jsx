@@ -29,7 +29,7 @@ const Login = () => {
 
       const { token, user: userData } = response.data;
 
-       localStorage.setItem("auth", JSON.stringify({ token, user: userData }));
+      localStorage.setItem("auth", JSON.stringify({ token, user: userData }));
       
       setAuth({ token, user: userData });
 
@@ -180,8 +180,9 @@ const Login = () => {
                 const response = await axios.post(`${BACKEND_URL}/auth/login`, guestUser);
 
                 const { token, user: userData } = response.data;
-                localStorage.setItem("token", token);
-                dispatch(setUserData(userData));
+                localStorage.setItem("auth", JSON.stringify({ token, user: userData }));
+                setAuth({ token, user: userData });
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; 
                 toast.success("Logged in as Guest");
                 navigate("/");
               } catch (error) {
