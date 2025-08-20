@@ -8,6 +8,7 @@ const AuthProvider = ({ children })=>{
         user: null,
         token: "",
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const data = localStorage.getItem("auth");
@@ -18,8 +19,11 @@ const AuthProvider = ({ children })=>{
             //default axios
             axios.defaults.headers.common['Authorization'] = `Bearer ${parseData.token}`;
         }
+        setLoading(false)
         //eslint-disable-next-line
     }, []);
+
+    if(loading) return null;
 
     return(
         <AuthContext.Provider value={[auth, setAuth]}>
